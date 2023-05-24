@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   Keyboard,
+  Alert,
   StyleSheet,
 } from 'react-native';
 import { useState, useEffect } from 'react';
@@ -74,6 +75,22 @@ const MemoScreen = ({ navigation, route }) => {
     navigation.pop();
   };
 
+  const deleteMemo = () => {
+    Alert.alert('이 메모를 삭제하시겠습니까?', undefined, [
+      {
+        text: '삭제',
+        style: 'destructive',
+        onPress: async () => {
+          const newList = { ...memoList };
+          delete newList[key];
+          saveMemoList(newList);
+          navigation.pop();
+        },
+      },
+      { text: '취소' },
+    ]);
+  }
+
   //deleteMemo - MainScreenMemoScreen parameter callback함수로 수정
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -106,7 +123,7 @@ const MemoScreen = ({ navigation, route }) => {
                 <EvilIcons name="unlock" size={30} color={color.black} />
               )}
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => deleteMemo(key)}>
+            <TouchableOpacity onPress={() => deleteMemo()}>
               <EvilIcons name="trash" size={30} color={color.black} />
             </TouchableOpacity>
           </View>
