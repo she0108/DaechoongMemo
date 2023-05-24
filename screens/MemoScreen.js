@@ -21,50 +21,36 @@ import { color } from '../color';
 
 const MemoScreen = ({ navigation, route }) => {
   const key = route.params.memoKey;
-  const [memoList, setMemoList] = useState({});
+  const memoList = route.params.memoList;
   const [title, setTitle] = useState('');
   const [date, setDate] = useState(new Date());
   const [content, setContent] = useState('');
   const [pinned, setPinned] = useState(false);
   const [locked, setLocked] = useState(false);
 
-  useEffect(() => {
-    const loadMemoList = async () => {
-      const s = await AsyncStorage.getItem('@memoList');
-      if (s != null) {
-        console.log('s != null');
-        setMemoList(JSON.parse(s));
-      }
-      console.log('s from storage - ', s);
-      console.log('memoList(after) - ', memoList);
-      console.log('JSON.parse(s) - ', JSON.parse(s));
-      //s에는 잘 저장되는데
-      //setMemoList() 해도 memoList에 저장이 안됨
-      loadMemo(key);
-    };
-    loadMemoList();
-  }, []);
+  useEffect(() => loadMemo(), []);
 
-  const loadMemo = (key) => {
-    console.log('loadMemo() - memoList[key] - ', memoList[key]);
-    //여기서도 memoList[key]는 undefined
+  const loadMemo = () => {
     setTitle(memoList[key].title);
-    setDate(memoList[key].date);
+    setDate(new Date(key));   //Non-serializable values were found in the navigation state
     setContent(memoList[key].content);
     setPinned(memoList[key].pinned);
     setLocked(memoList[key].locked);
   };
 
-  const saveMemoList = async (toSave) => {
-    await AsyncStorage.setItem('@memoList', JSON.stringify(toSave));
-  };
-
   const onChangeTitle = (event) => setTitle(event);
   const onChangeContent = (event) => setContent(event);
 
+  useEffect(() => {
+    const newDate = new Date();
+    setDate(newDate);
+    saveChange();
+  }, [title, content, pinned, locked]);
+
   const saveChange = () => {
     const newList = { ...memoList };
-    newList[key].date = new Date(); //newList[key]가 undefined?
+    newList[key] = {};
+    newList[key].date = date;
     newList[key].title = title;
     newList[key].content = content;
     newList[key].pinned = pinned;
@@ -72,7 +58,9 @@ const MemoScreen = ({ navigation, route }) => {
     saveMemoList(newList);
   };
 
-  //useEffect(() => saveChange(), [title, content, pinned, locked]);
+  const saveMemoList = async (toSave) => {
+    await AsyncStorage.setItem('@memoList', JSON.stringify(toSave));
+  };
 
   const goBack = () => {
     if (

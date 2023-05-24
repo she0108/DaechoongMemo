@@ -50,7 +50,6 @@ const MainScreen = ({ navigation }) => {
   //useEffect(() => trimMemoList(), [isFocused, memoList]);
 
   const createMemo = () => {
-    console.log('memoList(before) - ', memoList);
     const key = Date.now();
     const newList = { ...memoList };
     newList[key] = {
@@ -60,9 +59,7 @@ const MainScreen = ({ navigation }) => {
       pinned: false,
       locked: false,
     };
-    saveMemoList(newList);
-    console.log('newList - ', newList);
-    navigation.navigate('MemoScreen', { memoKey: key });
+    navigation.navigate('MemoScreen', { memoKey: key, memoList: newList });
   };
 
   return (
@@ -97,6 +94,7 @@ const MainScreen = ({ navigation }) => {
             .filter((key) => memoList[key].title.includes(textSearch))
             .map((key) => (
               <MemoContainer
+                key={key}
                 k={key}
                 memoList={memoList}
                 setMemoList={setMemoList}
@@ -111,6 +109,7 @@ const MainScreen = ({ navigation }) => {
             )
             .map((key) => (
               <MemoContainer
+                key={key}
                 k={key}
                 memoList={memoList}
                 setMemoList={setMemoList}
@@ -121,6 +120,7 @@ const MainScreen = ({ navigation }) => {
             .filter((key) => memoList[key].title.includes(textSearch))
             .map((key) => (
               <MemoContainer
+                key={key}
                 k={key}
                 memoList={memoList}
                 setMemoList={setMemoList}
@@ -135,6 +135,7 @@ const MainScreen = ({ navigation }) => {
             )
             .map((key) => (
               <MemoContainer
+                key={key}
                 k={key}
                 memoList={memoList}
                 setMemoList={setMemoList}
@@ -172,8 +173,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerText: {
-    fontFamily: 'Bold',
     fontSize: 30,
+    fontWeight: 600,
     color: color.black,
   },
   searchContainer: {
@@ -193,7 +194,6 @@ const styles = StyleSheet.create({
     color: color.black,
     flexGrow: 1,
     fontSize: 20,
-    fontFamily: 'Regular'
   },
   floatingBtn: {
     position: 'absolute',
