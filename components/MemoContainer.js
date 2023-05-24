@@ -4,6 +4,7 @@ import { View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { color } from '../color';
 
@@ -11,14 +12,6 @@ const STORAGE_KEY = '@memoList';
 
 const MemoContainer = ({ k, memoList, setMemoList }) => {
   const navigation = useNavigation();
-
-  useEffect(() => {
-    const loadMemoList = async () => {
-      const s = await AsyncStorage.getItem(STORAGE_KEY);
-      if (s != null) setMemoList(JSON.parse(s));
-    };
-    loadMemoList();
-  }, []);
 
   const setPinned = (key) => {
     const newList = { ...memoList };
@@ -49,7 +42,7 @@ const MemoContainer = ({ k, memoList, setMemoList }) => {
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('MemoScreen', { memoKey: k })}
+      onPress={() => navigation.navigate('MemoScreen', { memoKey: k, memoList: memoList })}
       onLongPress={() => deleteMemo(k)}>
       <View style={styles.memoItemContainer}>
         <Text style={styles.memoItemTitle}>
@@ -109,7 +102,6 @@ const styles = StyleSheet.create({
   memoItemContent: {
     color: color.darkgrey,
     fontSize: 15,
-    maxLines: 2,
   },
   pinContainer: {
     position: 'absolute',
