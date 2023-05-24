@@ -14,7 +14,6 @@ const MenuLine = ({ icon, text }) => {
     백업: () => console.log('메뉴 - 백업'),
     비밀번호: async () => {
       const PIN = await AsyncStorage.getItem('@PIN');
-      console.log(PIN);
       if (PIN == null) navigation.navigate('PINScreen2');
       else navigation.navigate('PINScreen1', { pin: PIN });
     },
