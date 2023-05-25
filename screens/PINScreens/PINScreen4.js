@@ -9,14 +9,19 @@ import { styles } from './PINScreenStyles';
 import { color } from '../../color';
 
 const PINScreen4 = ({ navigation, route }) => {
-  let PIN;  //숫자 하나 입력할 때마다 PIN이 undefined로 초기화됨...
+  const [PIN, setPIN] = useState();
   const [text, setText] = useState();
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    async function loadPIN() {
-      PIN = await AsyncStorage.getItem('@PIN');
-    }
+    const loadPIN = async () => {
+      try {
+        const pin = await AsyncStorage.getItem('@PIN');
+        setPIN(pin);
+      } catch (error) {
+        console.error('Failed to load PIN:', error);
+      }
+    };
     loadPIN();
   }, []);
 
