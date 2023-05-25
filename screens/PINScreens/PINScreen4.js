@@ -1,22 +1,37 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { View, TouchableOpacity, Text, TextInput } from 'react-native';
 
 import { AntDesign } from '@expo/vector-icons';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { styles } from './PINScreenStyles';
 import { color } from '../../color';
 
-const PINScreen1 = ({ navigation, route }) => {
+const PINScreen4 = ({ navigation, route }) => {
+  const [PIN, setPIN] = useState();
   const [text, setText] = useState();
   const [error, setError] = useState(false);
-  const PIN = route.params.pin;
+
+  useEffect(() => {
+    const loadPIN = async () => {
+      try {
+        const pin = await AsyncStorage.getItem('@PIN');
+        setPIN(pin);
+      } catch (error) {
+        console.error('Failed to load PIN:', error);
+      }
+    };
+    loadPIN();
+  }, []);
 
   const onChangeText = (event) => {
     console.log('event=', event, ' PIN=', PIN);
     setText(event);
     if (event.length == 4) {
-      if (event == PIN) navigation.replace('PINScreen2');
-      else {
+      if (event == PIN) {
+        navigation.replace('MemoScreen', { memoKey: route.params.memoKey, memoList: route.params.memoList });
+      } else {
         setError(true);
         setText('');
       }
@@ -30,7 +45,7 @@ const PINScreen1 = ({ navigation, route }) => {
           <AntDesign name="arrowleft" size={25} color={color.black} />
         </TouchableOpacity>
       </View>
-      <Text style={styles.promptPIN}>기존 비밀번호를 입력하세요</Text>
+      <Text style={styles.promptPIN}>비밀번호를 입력하세요</Text>
       <Text
         style={{
           ...styles.errorMessage,
@@ -51,4 +66,4 @@ const PINScreen1 = ({ navigation, route }) => {
   );
 };
 
-export default PINScreen1;
+export default PINScreen4;

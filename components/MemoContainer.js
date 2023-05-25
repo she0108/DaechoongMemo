@@ -40,9 +40,28 @@ const MemoContainer = ({ k, memoList, setMemoList }) => {
     ]);
   };
 
+  const checkLocked = async () => {
+    if (memoList[k].locked) {
+      const PIN = await AsyncStorage.getItem('@PIN');
+      if (PIN == null) {
+        Alert.alert('설정된 비밀번호가 없습니다', undefined, [
+          {
+            text: '지금 설정',
+            onPress: () => navigation.navigate('PINScreen2'),
+          },
+          { text: '다음에' },
+        ]);
+      } else {
+        navigation.navigate('PINScreen4', { memoKey: k, memoList: memoList });
+      }
+    } else {
+      navigation.navigate('MemoScreen', { memoKey: k, memoList: memoList });
+    }
+  }
+
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('MemoScreen', { memoKey: k, memoList: memoList })}
+      onPress={() => checkLocked()}
       onLongPress={() => deleteMemo(k)}>
       <View style={styles.memoItemContainer}>
         <Text style={styles.memoItemTitle}>
