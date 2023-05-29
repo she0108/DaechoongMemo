@@ -78,7 +78,10 @@ const MemoContainer = ({ k, memoList, setMemoList }) => {
             </View>
           ) : null}
         </Text>
-        <Text style={styles.memoItemContent}>
+        <Text 
+          numberOfLines='2' 
+          ellipsizeMode='tail'
+          style={styles.memoItemContent}>
           {memoList[k].locked ? null : memoList[k].content}
         </Text>
         <TouchableOpacity
