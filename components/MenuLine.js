@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import styled from 'styled-components/native';
 
 import { EvilIcons } from '@expo/vector-icons';
 
@@ -21,26 +21,28 @@ const MenuLine = ({ icon, text }) => {
   };
 
   return (
-    <TouchableOpacity style={styles.menuLine} onPress={nav[text]}>
-      <EvilIcons name={icon} size={32} style={styles.menuIcon} />
-      <Text style={styles.menuText}>{text}</Text>
-    </TouchableOpacity>
+    <Container onPress={nav[text]}>
+      <MenuIcon name={icon}/>
+      <MenuText>{text}</MenuText>
+    </Container>
   );
 };
 
-const styles = StyleSheet.create({
-  menuLine: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 20,
-  },
-  menuIcon: {
-    color: color.black,
-  },
-  menuText: {
-    fontSize: 20,
-    marginLeft: 10,
-  },
-});
+const Container = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  margin-vertical: 20px;
+`;
+
+const MenuIcon = styled(EvilIcons)`
+  font-size: 28px;
+  color: ${color.black};
+  margin-left: 5px;
+`;
+
+const MenuText = styled.Text`
+  font-size: 18px;
+  margin-left: 8px;
+`;
 
 export default MenuLine;

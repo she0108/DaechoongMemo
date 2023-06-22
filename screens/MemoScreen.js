@@ -1,15 +1,11 @@
 import {
-  View,
-  Text,
-  TextInput,
   StatusBar,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   ScrollView,
   Keyboard,
   Alert,
-  StyleSheet,
 } from 'react-native';
+import styled from 'styled-components/native';
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
@@ -17,8 +13,8 @@ import {
   AntDesign,
   MaterialCommunityIcons,
 } from '@expo/vector-icons';
-
 import { color } from '../color';
+
 
 const MemoScreen = ({ navigation, route }) => {
   const key = route.params.memoKey;
@@ -91,105 +87,122 @@ const MemoScreen = ({ navigation, route }) => {
     ]);
   }
 
-  //deleteMemo - MainScreenMemoScreen parameter callback함수로 수정
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.container}>
-        <StatusBar style="auto"></StatusBar>
-        <View style={styles.optionBar}>
-          <TouchableOpacity onPress={() => goBack()}>
-            <AntDesign name="arrowleft" size={20} color={color.black} />
-          </TouchableOpacity>
-          <View style={styles.iconContainer}>
-            <TouchableOpacity onPress={() => setPinned(!pinned)}>
-              {pinned ? (
-                <MaterialCommunityIcons
-                  name="pin"
-                  size={23}
-                  color={color.black}
-                />
-              ) : (
-                <MaterialCommunityIcons
-                  name="pin-outline"
-                  size={23}
-                  color="black"
-                />
-              )}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setLocked(!locked)}>
-              {locked ? (
-                <EvilIcons name="lock" size={30} color={color.black} />
-              ) : (
-                <EvilIcons name="unlock" size={30} color={color.black} />
-              )}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => deleteMemo()}>
-              <EvilIcons name="trash" size={30} color={color.black} />
-            </TouchableOpacity>
-          </View>
-        </View>
+      <Container>
+      <OptionContainer>
+            <OptionButton onPress={() => setPinned(!pinned)}>
+              <PinIcon name={pinned ? "pin" : "pin-outline"}/>
+            </OptionButton>
+            <OptionButton onPress={() => setLocked(!locked)}>
+              <LockIcon name={locked ? "lock" : "unlock"}/>
+            </OptionButton>
+            <OptionButton onPress={() => deleteMemo()}>
+              <DeleteIcon name="trash"/>
+            </OptionButton>
+          </OptionContainer>
+        <StatusBar/>
+        <HeaderBar>
+          <BackButton onPress={() => navigation.pop()}>
+            <BackIcon name="arrowleft"/>
+          </BackButton>
+        </HeaderBar>
         <ScrollView>
-          <Text style={styles.memoDate}>{date.toLocaleDateString()}</Text>
-          <TextInput
-            style={styles.memoTitle}
+          <DateText>{date.toLocaleDateString()}</DateText>
+          <TitleText
             multiline={true}
             scrollEnabled={false}
             returnKeyType="done"
             blurOnSubmit={true}
             placeholder="제목"
             value={title}
-            onChangeText={onChangeTitle}
-          />
-          <TextInput
-            style={styles.memoContent}
+            onChangeText={onChangeTitle}/>
+          <ContentText
             multiline={true}
             scrollEnabled={false}
             placeholder="내용"
             value={content}
-            onChangeText={onChangeContent}
-          />
-        </ScrollView>
-      </View>
+            onChangeText={onChangeContent}/>
+        </ScrollView>  
+      </Container>
     </TouchableWithoutFeedback>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 15,
-    backgroundColor: color.white,
-    flexDirection: 'column',
-  },
-  optionBar: {
-    marginTop: 40,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  iconContainer: {
-    marginBottom: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 5,
-    borderRadius: 20,
-    backgroundColor: color.lightgrey,
-  },
-  memoDate: {
-    color: color.darkgrey,
-    fontSize: 15,
-    marginTop: 7,
-  },
-  memoTitle: {
-    color: color.black,
-    fontSize: 30,
-    marginTop: 5,
-  },
-  memoContent: {
-    color: color.black,
-    fontSize: 20,
-    marginTop: 10,
-  },
-});
+const Container = styled.View`
+  height: 100%;
+  padding-top: 47px;
+  padding-bottom: 34px; 
+  padding-horizontal: 15px;
+  background-color: ${color.white};
+  position: relative;
+`;
+
+const HeaderBar = styled.View`
+  height: 40px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  flexDirection: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const BackButton = styled.TouchableOpacity``;
+
+const BackIcon = styled(AntDesign)`
+  font-size: 25px;
+  color: ${color.black};
+`;
+
+const OptionContainer = styled.View`
+  padding: 5px;
+  border-radius: 50%;
+  background-color: ${color.lightgrey};
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  position: absolute;
+  top: 55px;
+  right: 15px;
+`;
+
+const OptionButton = styled.TouchableOpacity``;
+
+const PinIcon = styled(MaterialCommunityIcons)`
+  font-size: 23px;
+  color: ${color.black};
+  margin-left: 3px;
+`;
+
+const LockIcon = styled(EvilIcons)`
+  font-size: 30px;
+  color: ${color.black};
+`;
+
+const DeleteIcon = styled(EvilIcons)`
+  font-size: 30px;
+  color: ${color.black};
+`;
+
+const DateText = styled.Text`
+  font-size: 15px;
+  color: ${color.darkgrey};
+  margin-top: 0px;
+  text-align: left;
+
+`;
+
+const TitleText = styled.TextInput`
+  font-size: 28px;
+  font-weight: 600;
+  color: ${color.black};
+  margin-top: 5px;
+`;
+
+const ContentText = styled.TextInput`
+  font-size: 20px;
+  color: ${color.black};
+  margin-top: 8px;
+`;
 
 export default MemoScreen;
