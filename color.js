@@ -5,5 +5,6 @@ export const color = {
     darkgrey: '#8D8D8D',
     black: '#353535',
     red: '#EF5F5F',
+    blue: '#5F8FEF',
     none: 'rgba(0, 0, 0, 0)'
 }
