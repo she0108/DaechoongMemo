@@ -1,7 +1,7 @@
-import { useState, useContext, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { Alert } from 'react-native';
+import styled from 'styled-components/native';
 
-import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -60,84 +60,48 @@ const MemoContainer = ({ k, memoList, setMemoList }) => {
   }
 
   return (
-    <TouchableOpacity
+    <Container
       onPress={() => checkLocked()}
       onLongPress={() => deleteMemo(k)}>
-      <View style={styles.memoItemContainer}>
-        <Text style={styles.memoItemTitle}>
-          {memoList[k].title}
-          {memoList[k].locked ? (
-            <View>
-              <View style={styles.spaceBetween} />
-              <FontAwesome
-                name="lock"
-                size={20}
-                color={color.darkgrey}
-                style={styles.iconLocked}
-              />
-            </View>
-          ) : null}
-        </Text>
-        <Text 
-          numberOfLines='2' 
-          ellipsizeMode='tail'
-          style={styles.memoItemContent}>
-          {memoList[k].locked ? null : memoList[k].content}
-        </Text>
-        <TouchableOpacity
-          onPress={() => setPinned(k)}
-          style={styles.pinContainer}>
-          <MaterialIcons
-            name="push-pin"
-            size={22}
-            style={
-              memoList[k].pinned
-                ? styles.iconPinnedTrue
-                : styles.iconPinnedFalse
-            }
-          />
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
+      <Title numberOfLines={1}>{memoList[k].title}</Title>
+      <Content numberOfLines={3}>{memoList[k].locked ? null : memoList[k].content}</Content>
+      <PinContainer onPress={() => setPinned(k)}>
+        <PinIcon name="push-pin" pinned={memoList[k].pinned}/>
+      </PinContainer>
+    </Container>
   );
 };
 
-const styles = StyleSheet.create({
-  memoItemContainer: {
-    backgroundColor: color.lightgrey,
-    borderRadius: 7,
-    marginBottom: 10,
-    padding: 10,
-  },
-  memoItemTitle: {
-    color: color.black,
-    fontSize: 20,
-    marginBottom: 2,
-  },
-  spaceBetween: {
-    backgroundColor: color.black,
-    width: 1,
-  },
-  iconLocked: {
-    paddingLeft: 10,
-  },
-  memoItemContent: {
-    color: color.darkgrey,
-    fontSize: 15,
-  },
-  pinContainer: {
-    position: 'absolute',
-    top: 8,
-    right: 5,
-  },
-  iconPinnedTrue: {
-    color: color.darkgrey,
-    transform: [{ rotate: '15deg' }],
-  },
-  iconPinnedFalse: {
-    color: color.grey,
-    transform: [{ rotate: '15deg' }],
-  },
-});
+const Container = styled.TouchableOpacity`
+  background-color: ${color.lightgrey};
+  border-radius: 7px;
+  margin-bottom: 10px;
+  padding: 12px;
+`;
+
+const Title = styled.Text`
+  color: ${color.black};
+  font-size: 19px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  margin-right: 20px;
+`;
+
+const Content = styled.Text`
+  color: ${color.darkgrey};
+  font-size: 15px;
+`;
+
+const PinContainer = styled.TouchableOpacity`
+  position: absolute;
+  top: 12px;
+  right: 8px;
+`;
+
+const PinIcon = styled(MaterialIcons)`
+  font-size: 22px;
+  transform: rotate(15deg);
+  color: ${props => props.pinned ? color.darkgrey : color.grey};
+`;
 
 export default MemoContainer;

@@ -1,20 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
-import {
-  View,
-  Text,
-  StatusBar,
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  Keyboard,
-  StyleSheet,
-} from 'react-native';
+import { StatusBar, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import styled from 'styled-components/native';
 import { EvilIcons } from '@expo/vector-icons';
 import MemoContainer from '../components/MemoContainer';
 import { color } from '../color';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const MainScreen = ({ navigation }) => {
   const [memoList, setMemoList] = useState({});
@@ -64,153 +56,155 @@ const MainScreen = ({ navigation }) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.container}>
-        <StatusBar style="auto"></StatusBar>
-        <View style={styles.header}>
-          <Text style={styles.headerText}>대충메모</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('MenuScreen')}>
-            <EvilIcons name="navicon" size={35} color={color.black} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.searchContainer}>
-          <EvilIcons
-            name="search"
-            size={30}
-            color={color.grey}
-            style={styles.iconSearch}
-          />
-          <TextInput
+      <Container>
+        <StatusBar/>
+        <Header>
+          <HeaderText>대충메모</HeaderText>
+          <MenuButton onPress={() => navigation.navigate('MenuScreen')}>
+            <MenuIcon name="navicon"/>
+          </MenuButton>
+        </Header>
+        <SearchContainer>
+          <SearchIcon name="search"/>
+          <SearchInput 
             returnKeyType="search"
             onChangeText={onChangeText}
             value={textSearch}
             placeholder="메모 검색"
-            clearButtonMode="while-editing"
-            style={styles.inputSearch}
-          />
-        </View>
+            clearButtonMode="while-editing"/>
+        </SearchContainer>
         <ScrollView>
           {Object.keys(memoList)
-            .filter((key) => memoList[key].pinned)
-            .filter((key) => memoList[key].title.includes(textSearch))
-            .map((key) => (
-              <MemoContainer
-                key={key}
-                k={key}
-                memoList={memoList}
-                setMemoList={setMemoList}
-              />
-            ))}
-          {Object.keys(memoList)
-            .filter((key) => memoList[key].pinned)
-            .filter(
-              (key) =>
-                !memoList[key].title.includes(textSearch) &&
-                memoList[key].content.includes(textSearch)
-            )
-            .map((key) => (
-              <MemoContainer
-                key={key}
-                k={key}
-                memoList={memoList}
-                setMemoList={setMemoList}
-              />
-            ))}
-          {Object.keys(memoList)
-            .filter((key) => !memoList[key].pinned)
-            .filter((key) => memoList[key].title.includes(textSearch))
-            .map((key) => (
-              <MemoContainer
-                key={key}
-                k={key}
-                memoList={memoList}
-                setMemoList={setMemoList}
-              />
-            ))}
-          {Object.keys(memoList)
-            .filter((key) => !memoList[key].pinned)
-            .filter(
-              (key) =>
-                !memoList[key].title.includes(textSearch) &&
-                memoList[key].content.includes(textSearch)
-            )
-            .map((key) => (
-              <MemoContainer
-                key={key}
-                k={key}
-                memoList={memoList}
-                setMemoList={setMemoList}
-              />
-            ))}
+             .filter((key) => memoList[key].pinned)
+             .filter((key) => memoList[key].title.includes(textSearch))
+             .map((key) => (
+               <MemoContainer
+                 key={key}
+                 k={key}
+                 memoList={memoList}
+                 setMemoList={setMemoList}
+               />
+             ))}
+           {Object.keys(memoList)
+             .filter((key) => memoList[key].pinned)
+             .filter(
+               (key) =>
+                 !memoList[key].title.includes(textSearch) &&
+                 memoList[key].content.includes(textSearch)
+             )
+             .map((key) => (
+               <MemoContainer
+                 key={key}
+                 k={key}
+                 memoList={memoList}
+                 setMemoList={setMemoList}
+               />
+             ))}
+           {Object.keys(memoList)
+             .filter((key) => !memoList[key].pinned)
+             .filter((key) => memoList[key].title.includes(textSearch))
+             .map((key) => (
+               <MemoContainer
+                 key={key}
+                 k={key}
+                 memoList={memoList}
+                 setMemoList={setMemoList}
+               />
+             ))}
+           {Object.keys(memoList)
+             .filter((key) => !memoList[key].pinned)
+             .filter(
+               (key) =>
+                 !memoList[key].title.includes(textSearch) &&
+                 memoList[key].content.includes(textSearch)
+             )
+             .map((key) => (
+               <MemoContainer
+                 key={key}
+                 k={key}
+                 memoList={memoList}
+                 setMemoList={setMemoList}
+               />
+             ))}
         </ScrollView>
-        <TouchableOpacity
-          style={styles.floatingBtn}
-          onPress={() => createMemo()}>
-          <EvilIcons
-            name="pencil"
-            size={50}
-            color={color.white}
-            style={styles.floatingBtnIcon}
-          />
-        </TouchableOpacity>
-      </View>
+        <FloatingButton onPress={createMemo}>
+          <FloatingButtonIcon name="pencil"/>
+        </FloatingButton>
+      </Container>
     </TouchableWithoutFeedback>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 15,
-    backgroundColor: color.white,
-    flexDirection: 'column',
-  },
-  header: {
-    height: 50,
-    marginTop: 50,
-    marginBottom: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  headerText: {
-    fontSize: 30,
-    fontWeight: 600,
-    color: color.black,
-  },
-  searchContainer: {
-    height: 40,
-    marginBottom: 10,
-    borderWidth: 2,
-    borderColor: color.grey,
-    borderRadius: 25,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  iconSearch: {
-    marginLeft: 3,
-    marginRight: 1,
-  },
-  inputSearch: {
-    color: color.black,
-    flexGrow: 1,
-    fontSize: 20,
-  },
-  floatingBtn: {
-    position: 'absolute',
-    right: 30,
-    bottom: 30,
-    width: 80,
-    height: 80,
-    backgroundColor: color.black,
-    borderRadius: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  floatingBtnIcon: {
-    color: color.white,
-    top: -2.4,
-    left: 2,
-  },
-});
+const Container = styled.View`
+  height: 100%;
+  padding-top: 47px;
+  padding-bottom: 34px; 
+  padding-horizontal: 15px;
+  background-color: ${color.white};
+`;
+
+const Header = styled.View`
+  height: 40px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  flexDirection: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const HeaderText = styled.Text`
+  font-size: 30px;
+  font-weight: 600;
+  color: ${color.black};
+`;
+
+const MenuButton = styled.TouchableOpacity``;
+
+const MenuIcon = styled(EvilIcons)`
+  font-size: 35px;
+  color: ${color.black};
+`;
+
+const SearchContainer = styled.View`
+  height: 40px;
+  border-width: 2px;
+  border-color: ${color.grey};
+  border-radius: 50%;
+  margin-bottom: 13px;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const SearchIcon = styled(EvilIcons)`
+  font-size: 30px;
+  color: ${color.grey};
+  margin-left: 3px;
+  margin-right: 1px;
+`;
+
+const SearchInput = styled.TextInput`
+  color: ${color.black};
+  flex-grow: 1;
+  font-size: 20px;
+`;
+
+const FloatingButton = styled.TouchableOpacity`
+  position: absolute;
+  right: 30px;
+  bottom: 40px;
+  width: 80px;
+  height: 80px;
+  background-color: ${color.black};
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+`;
+
+const FloatingButtonIcon = styled(EvilIcons)`
+  font-size: 50px;
+  color: ${color.white};
+  top: -2.4px;
+  left: 2px;
+`;
 
 export default MainScreen;
