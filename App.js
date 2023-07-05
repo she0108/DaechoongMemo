@@ -9,6 +9,8 @@ import PINScreen1 from './screens/PINScreens/PINScreen1';
 import PINScreen2 from './screens/PINScreens/PINScreen2';
 import PINScreen3 from './screens/PINScreens/PINScreen3';
 import PINScreen4 from './screens/PINScreens/PINScreen4';
+import LoginScreen from './screens/LoginScreen';
+import SignupScreen from './screens/SignupScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +28,8 @@ export default function App() {
         <Stack.Screen name="PINScreen2" component={PINScreen2} />
         <Stack.Screen name="PINScreen3" component={PINScreen3} />
         <Stack.Screen name="PINScreen4" component={PINScreen4} />
+        <Stack.Screen name="LoginScreen" component={LoginScreen} />
+        <Stack.Screen name="SignupScreen" component={SignupScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

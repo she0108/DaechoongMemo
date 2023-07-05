@@ -1,20 +1,47 @@
-import { StatusBar } from 'react-native';
+import { StatusBar, Alert, TouchableOpacity } from 'react-native';
+import { useState, useEffect } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { AntDesign } from '@expo/vector-icons';
 import { color } from '../color';
+import { auth } from '../firebaseConfig';
+import { signOut, onAuthStateChanged } from "firebase/auth";
 
 
 const MenuScreen = ({ navigation }) => {
-  //메뉴 - 계정, 테마(default/light/dark), 폰트, 언어, 백업, locked 비밀번호 설정, 날짜 표기
-  
-  //계정
-  //  이메일 | - 로그인하기 / she1018@yonsei.ac.kr 로그아웃
-  //  백업 | 마지막 백업 2023/06/21
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [email, setEmail] = useState("-");
 
-  //화면
-  //  테마 | default/light/dark
-  //  글꼴 | 
-  //  시간 표기방식 | 날짜/날짜+시간, 0000/00/00, 0000년00월00일
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setLoggedIn(true);
+      setEmail(user.email);
+    } else {
+      setLoggedIn(false);
+      setEmail("-");
+    }
+  });
+  
+
+  const handleLogin = () => navigation.navigate("LoginScreen");
+
+  const handleLogout = () => {
+    Alert.alert('로그아웃', undefined, [
+      {
+        text: '확인',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await signOut(auth);
+          } catch (e) {
+            console.error(e);
+          }
+        },
+      },
+      { text: '취소' },
+    ]);
+  }
+
 
   return (
     <Container>
@@ -26,35 +53,51 @@ const MenuScreen = ({ navigation }) => {
       </HeaderBar>
       <MenuSection>
         <MenuName>계정</MenuName>
+        <MenuBox>
         <MenuLine>
-          <MenuTextFirst>이메일</MenuTextFirst>
-          <MenuTextNext>-</MenuTextNext>
-          <MenuTextLast c={color.blue}>로그인</MenuTextLast>
+          <MenuTextMain>이메일</MenuTextMain>
+          <MenuTextSub c={color.darkgrey}>{email}</MenuTextSub>
+          <MenuTextTouchable onPress={loggedIn ? handleLogout : handleLogin}>
+            <MenuTextSub c={loggedIn ? color.red : color.blue}>{loggedIn ? "로그아웃" : "로그인"}</MenuTextSub>
+          </MenuTextTouchable>
         </MenuLine>
         <MenuLine>
-          <MenuTextFirst>이메일</MenuTextFirst>
-          <MenuTextNext>she1018@yonsei.ac.kr</MenuTextNext>
-          <MenuTextLast c={color.red}>로그아웃</MenuTextLast>
+          <MenuTextMain>이메일 변경</MenuTextMain>
+          <MenuTextTouchable>
+            <MenuTextSub c={color.darkgrey}>{">"}</MenuTextSub>
+          </MenuTextTouchable>
         </MenuLine>
         <MenuLine>
-          <MenuTextFirst>백업</MenuTextFirst>
-          <MenuTextLast c={color.darkgrey}>↔ 2023/06/22 19:12</MenuTextLast>
+          <MenuTextMain>비밀번호 재설정</MenuTextMain>
+          <MenuTextTouchable>
+            <MenuTextSub c={color.darkgrey}>{">"}</MenuTextSub>
+          </MenuTextTouchable>
         </MenuLine>
+        <MenuLine>
+          <MenuTextMain>백업</MenuTextMain>
+          <MenuTextTouchable>
+            <MenuTextSub c={color.darkgrey}>↔ 2023/06/22 19:12</MenuTextSub>
+          </MenuTextTouchable>
+        </MenuLine>
+        </MenuBox>
       </MenuSection>
+
       <MenuSection>
         <MenuName>화면</MenuName>
+        <MenuBox>
         <MenuLine>
-          <MenuTextFirst>테마</MenuTextFirst>
-          <MenuTextLast c={color.darkgrey}>밝게</MenuTextLast>
+          <MenuTextMain>테마</MenuTextMain>
+          <MenuTextSub c={color.darkgrey}>밝게</MenuTextSub>
         </MenuLine>
         <MenuLine>
-          <MenuTextFirst>글꼴</MenuTextFirst>
-          <MenuTextLast c={color.darkgrey}>기본</MenuTextLast>
+          <MenuTextMain>글꼴</MenuTextMain>
+          <MenuTextSub c={color.darkgrey}>기본</MenuTextSub>
         </MenuLine>
         <MenuLine>
-          <MenuTextFirst>날짜 표기방식</MenuTextFirst>
-          <MenuTextLast c={color.darkgrey}>2023/06/22</MenuTextLast>
+          <MenuTextMain>날짜 표기방식</MenuTextMain>
+          <MenuTextSub c={color.darkgrey}>2023/06/22</MenuTextSub>
         </MenuLine>
+        </MenuBox>
       </MenuSection>
     </Container>
   );
@@ -86,14 +129,20 @@ const BackIcon = styled(AntDesign)`
 
 const MenuSection = styled.View`
   padding: 5px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 `;
 
 const MenuName = styled.Text`
   font-size: 28px;
   font-weight: 900;
   color: ${color.black};
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+`;
+
+const MenuBox = styled.View`
+  background-color: ${color.lightgrey};
+  border-radius: 7%;
+  padding: 10px;
 `;
 
 const MenuLine = styled.View`
@@ -103,23 +152,21 @@ const MenuLine = styled.View`
   align-items: center;
 `;
 
-const MenuTextFirst = styled.Text`
+const MenuTextMain = styled.Text`
   font-size: 18px;
   font-weight: 500;
   margin-right: 10px;
 `;
 
-const MenuTextNext = styled.Text`
-  font-size: 18px;
-  color: ${color.darkgrey};
-`;
-
-const MenuTextLast = styled.Text`
+const MenuTextSub = styled.Text`
   font-size: 18px;
   color: ${props => props.c};
+`;
+
+const MenuTextTouchable = styled.TouchableOpacity`
   position: absolute;
   right: 5px;
-`;
+`
 
 const Line = styled.View`
   border-top-width: 1px;
