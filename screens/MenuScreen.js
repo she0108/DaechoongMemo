@@ -83,6 +83,12 @@ const MenuScreen = ({ navigation }) => {
     }
   }
 
+  const handleChangePin = async () => {
+    const PIN = await AsyncStorage.getItem('@PIN');
+    if (PIN == null) navigation.navigate('PINScreen2');
+    else navigation.navigate('PINScreen1', { pin: PIN });
+  }
+
 
   return (
     <Container>
@@ -102,7 +108,7 @@ const MenuScreen = ({ navigation }) => {
             <MenuTextSub c={user ? color.red : color.blue}>{user ? "로그아웃" : "로그인"}</MenuTextSub>
           </MenuTextTouchable>
         </MenuLine>
-        <MenuLine>
+        {/* <MenuLine>
           <MenuTextMain>이메일 변경</MenuTextMain>
           <MenuTextTouchable>
             <MenuTextSub c={color.darkgrey}>{">"}</MenuTextSub>
@@ -113,7 +119,7 @@ const MenuScreen = ({ navigation }) => {
           <MenuTextTouchable>
             <MenuTextSub c={color.darkgrey}>{">"}</MenuTextSub>
           </MenuTextTouchable>
-        </MenuLine>
+        </MenuLine> */}
         <MenuLine>
           <MenuTextMain>백업</MenuTextMain>
           <MenuTextTouchable onPress={handleBackup}>
@@ -124,19 +130,25 @@ const MenuScreen = ({ navigation }) => {
       </MenuSection>
 
       <MenuSection>
-        <MenuName>화면</MenuName>
+        <MenuName>설정</MenuName>
         <MenuBox>
         <MenuLine>
           <MenuTextMain>테마</MenuTextMain>
-          <MenuTextSub c={color.darkgrey}>밝게</MenuTextSub>
+          <MenuTextTouchable>
+            <MenuTextSub c={color.darkgrey}>밝게</MenuTextSub>
+          </MenuTextTouchable>
         </MenuLine>
         <MenuLine>
           <MenuTextMain>글꼴</MenuTextMain>
-          <MenuTextSub c={color.darkgrey}>기본</MenuTextSub>
+          <MenuTextTouchable>
+            <MenuTextSub c={color.darkgrey}>기본</MenuTextSub>
+          </MenuTextTouchable>
         </MenuLine>
         <MenuLine>
-          <MenuTextMain>날짜 표기방식</MenuTextMain>
-          <MenuTextSub c={color.darkgrey}>2023/06/22</MenuTextSub>
+          <MenuTextMain>비밀번호</MenuTextMain>
+          <MenuTextTouchable onPress={handleChangePin}>
+            <MenuTextSub c={color.darkgrey}>변경</MenuTextSub>
+          </MenuTextTouchable>
         </MenuLine>
         </MenuBox>
       </MenuSection>
