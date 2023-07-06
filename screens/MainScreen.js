@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { StatusBar, ScrollView, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import styled from 'styled-components/native';
-import { EvilIcons } from '@expo/vector-icons';
+import { EvilIcons, FontAwesome5, Feather } from '@expo/vector-icons';
 import MemoContainer from '../components/MemoContainer';
 import { color } from '../color';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -83,6 +83,7 @@ const MainScreen = ({ navigation, route }) => {
             onChangeText={onChangeText}
             value={textSearch}
             placeholder="메모 검색"
+            placeholderTextColor={color.gray200}
             clearButtonMode="while-editing"/>
         </SearchContainer>
         <ScrollView>
@@ -140,7 +141,7 @@ const MainScreen = ({ navigation, route }) => {
              ))}
         </ScrollView>
         <FloatingButton onPress={createMemo}>
-          <FloatingButtonIcon name="pencil"/>
+          <FloatingButtonIcon name="pen"/>
         </FloatingButton>
       </Container>
     </TouchableWithoutFeedback>
@@ -180,24 +181,24 @@ const MenuIcon = styled(EvilIcons)`
 const SearchContainer = styled.View`
   height: 40px;
   border-width: 2px;
-  border-color: ${color.grey};
+  border-color: ${color.gray100};
   border-radius: 50%;
   margin-bottom: 13px;
   flex-direction: row;
   align-items: center;
 `;
 
-const SearchIcon = styled(EvilIcons)`
-  font-size: 30px;
-  color: ${color.grey};
-  margin-left: 3px;
-  margin-right: 1px;
+const SearchIcon = styled(Feather)`
+  font-size: 20px;
+  color: ${color.gray200};
+  margin-left: 8px;
+  margin-right: 5px;
 `;
 
 const SearchInput = styled.TextInput`
   color: ${color.black};
   flex-grow: 1;
-  font-size: 20px;
+  font-size: 18px;
 `;
 
 const FloatingButton = styled.TouchableOpacity`
@@ -212,11 +213,11 @@ const FloatingButton = styled.TouchableOpacity`
   align-items: center;
 `;
 
-const FloatingButtonIcon = styled(EvilIcons)`
-  font-size: 50px;
+const FloatingButtonIcon = styled(FontAwesome5)`
+  font-size: 25px;
   color: ${color.white};
-  top: -2.4px;
-  left: 2px;
+  top: -1px;
+  left: 1px;
 `;
 
 export default MainScreen;

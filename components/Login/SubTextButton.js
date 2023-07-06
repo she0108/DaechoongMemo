@@ -19,6 +19,6 @@ const Container = styled.TouchableOpacity`
 
 const InnerText = styled.Text`
     font-size: 18px;
-    color: ${color.darkgrey};
+    color: ${color.gray500};
     text-align: center;
 `;

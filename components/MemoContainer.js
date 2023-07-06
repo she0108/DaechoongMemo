@@ -78,7 +78,7 @@ const MemoContainer = ({ k, memoList, setMemoList }) => {
 };
 
 const Container = styled.TouchableOpacity`
-  background-color: ${color.lightgrey};
+  background-color: ${color.gray50};
   border-radius: 7%;
   margin-bottom: 10px;
   padding: 12px;
@@ -99,7 +99,7 @@ const Title = styled.Text`
 `;
 
 const Content = styled.Text`
-  color: ${color.darkgrey};
+  color: ${color.gray500};
   font-size: 15px;
 `;
 
@@ -111,7 +111,7 @@ const LockContainer = styled.View`
 
 const LockIcon = styled(FontAwesome)`
   font-size: 20px;
-  color: ${color.darkgrey};
+  color: ${color.gray500};
 `;
 
 const PinContainer = styled.TouchableOpacity`
@@ -121,7 +121,7 @@ const PinContainer = styled.TouchableOpacity`
 const PinIcon = styled(MaterialIcons)`
   font-size: 22px;
   transform: rotate(15deg);
-  color: ${props => props.pinned ? color.darkgrey : color.grey};
+  color: ${props => props.pinned ? color.gray500 : color.gray200};
 `;
 
 export default MemoContainer;

@@ -12,6 +12,8 @@ import {
   EvilIcons,
   AntDesign,
   MaterialCommunityIcons,
+  FontAwesome,
+  FontAwesome5
 } from '@expo/vector-icons';
 import { color } from '../color';
 
@@ -94,9 +96,11 @@ const MemoScreen = ({ navigation, route }) => {
             <OptionButton onPress={() => setPinned(!pinned)}>
               <PinIcon name={pinned ? "pin" : "pin-outline"}/>
             </OptionButton>
+            <Line/>
             <OptionButton onPress={() => setLocked(!locked)}>
-              <LockIcon name={locked ? "lock" : "unlock"}/>
+              <LockIcon name={locked ? "lock" : "unlock-alt"}/>
             </OptionButton>
+            <Line/>
             <OptionButton onPress={() => deleteMemo()}>
               <DeleteIcon name="trash"/>
             </OptionButton>
@@ -155,8 +159,8 @@ const BackIcon = styled(AntDesign)`
 `;
 
 const OptionContainer = styled.View`
-  padding: 5px;
-  border-radius: 50%;
+  padding: 2px;
+  border-radius: 10px;
   background-color: ${color.lightgrey};
   flex-direction: row;
   align-items: center;
@@ -166,22 +170,34 @@ const OptionContainer = styled.View`
   right: 15px;
 `;
 
-const OptionButton = styled.TouchableOpacity``;
+const OptionButton = styled.TouchableOpacity`
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const PinIcon = styled(MaterialCommunityIcons)`
   font-size: 23px;
-  color: ${color.black};
-  margin-left: 3px;
+  color: ${color.gray500};
 `;
 
-const LockIcon = styled(EvilIcons)`
-  font-size: 30px;
-  color: ${color.black};
+const LockIcon = styled(FontAwesome)`
+  font-size: 20px;
+  color: ${color.gray500};
+  margin-top: 1px;
 `;
 
-const DeleteIcon = styled(EvilIcons)`
-  font-size: 30px;
-  color: ${color.black};
+const DeleteIcon = styled(FontAwesome5)`
+  font-size: 17px;
+  color: ${color.gray500};
+`;
+
+const Line = styled.View`
+  width: 1px;
+  height: 90%;
+  background-color: ${color.gray200};
 `;
 
 const DateText = styled.Text`

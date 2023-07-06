@@ -2,7 +2,7 @@ import { StatusBar, Alert, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styled from 'styled-components/native';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { color } from '../color';
 import { auth, database } from '../firebaseConfig';
 import { signOut, onAuthStateChanged } from "firebase/auth";
@@ -103,7 +103,7 @@ const MenuScreen = ({ navigation }) => {
         <MenuBox>
         <MenuLine>
           <MenuTextMain>이메일</MenuTextMain>
-          <MenuTextSub c={color.darkgrey}>{user ? user.email : "-"}</MenuTextSub>
+          <MenuTextSub c={color.gray500} numberOfLines={1} ellipsizeMode="tail">{user ? user.email : "-"}</MenuTextSub>
           <MenuTextTouchable onPress={user ? handleLogout : handleLogin}>
             <MenuTextSub c={user ? color.red : color.blue}>{user ? "로그아웃" : "로그인"}</MenuTextSub>
           </MenuTextTouchable>
@@ -111,19 +111,20 @@ const MenuScreen = ({ navigation }) => {
         {/* <MenuLine>
           <MenuTextMain>이메일 변경</MenuTextMain>
           <MenuTextTouchable>
-            <MenuTextSub c={color.darkgrey}>{">"}</MenuTextSub>
+            <MenuTextSub c={color.gray500}>{">"}</MenuTextSub>
           </MenuTextTouchable>
         </MenuLine>
         <MenuLine>
           <MenuTextMain>비밀번호 재설정</MenuTextMain>
           <MenuTextTouchable>
-            <MenuTextSub c={color.darkgrey}>{">"}</MenuTextSub>
+            <MenuTextSub c={color.gray500}>{">"}</MenuTextSub>
           </MenuTextTouchable>
         </MenuLine> */}
         <MenuLine>
           <MenuTextMain>백업</MenuTextMain>
           <MenuTextTouchable onPress={handleBackup}>
-            <MenuTextSub c={color.darkgrey}>{user ? lastBackup : "로그인 필요"}</MenuTextSub>
+            {user && <Ionicons name="cloud-upload-outline" size={21} color={color.gray500} style={{marginRight: 8}}/>}
+            <MenuTextSub c={color.gray500}>{user ? lastBackup : "로그인 필요"}</MenuTextSub>
           </MenuTextTouchable>
         </MenuLine>
         </MenuBox>
@@ -135,19 +136,19 @@ const MenuScreen = ({ navigation }) => {
         <MenuLine>
           <MenuTextMain>테마</MenuTextMain>
           <MenuTextTouchable>
-            <MenuTextSub c={color.darkgrey}>밝게</MenuTextSub>
+            <MenuTextSub c={color.gray500}>밝게</MenuTextSub>
           </MenuTextTouchable>
         </MenuLine>
         <MenuLine>
           <MenuTextMain>글꼴</MenuTextMain>
           <MenuTextTouchable>
-            <MenuTextSub c={color.darkgrey}>기본</MenuTextSub>
+            <MenuTextSub c={color.gray500}>기본</MenuTextSub>
           </MenuTextTouchable>
         </MenuLine>
         <MenuLine>
-          <MenuTextMain>비밀번호</MenuTextMain>
+          <MenuTextMain>메모 잠금</MenuTextMain>
           <MenuTextTouchable onPress={handleChangePin}>
-            <MenuTextSub c={color.darkgrey}>변경</MenuTextSub>
+            <MenuTextSub c={color.blue}>PIN 변경 →</MenuTextSub>
           </MenuTextTouchable>
         </MenuLine>
         </MenuBox>
@@ -193,37 +194,36 @@ const MenuName = styled.Text`
 `;
 
 const MenuBox = styled.View`
-  background-color: ${color.lightgrey};
+  background-color: ${color.gray50};
   border-radius: 7%;
   padding: 10px;
 `;
 
 const MenuLine = styled.View`
   margin-vertical: 10px;
-  margin-left: 5px;
+  margin-horizontal: 5px;
   flex-direction: row;
   align-items: center;
+  white-space: nowrap;
 `;
 
 const MenuTextMain = styled.Text`
   font-size: 18px;
   font-weight: 500;
   margin-right: 10px;
+  color: ${color.black};
 `;
 
 const MenuTextSub = styled.Text`
+  flex-shrink: 1;
   font-size: 18px;
   color: ${props => props.c};
 `;
 
 const MenuTextTouchable = styled.TouchableOpacity`
-  position: absolute;
-  right: 5px;
+  flex-grow: 1;
+  flex-direction: row;
+  justify-content: flex-end;
 `
-
-const Line = styled.View`
-  border-top-width: 1px;
-  border-top-color: ${color.lightgrey};
-`;
 
 export default MenuScreen;

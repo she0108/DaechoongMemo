@@ -124,13 +124,14 @@ const HeaderText = styled.Text`
   font-weight: 700;
   margin-top: 30px;
   margin-bottom: 40px;
+  color: ${color.black};
 `;
 
 const LoginInput = styled.TextInput`
   font-size: 16px;
   width: 80%;
   border-radius: 5px;
-  background-color: ${color.lightgrey};
+  background-color: ${color.gray50};
   padding: 12px;
   margin-bottom: 25px;
 `;
