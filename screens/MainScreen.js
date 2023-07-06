@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
-import { StatusBar, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { StatusBar, ScrollView, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import styled from 'styled-components/native';
 import { EvilIcons } from '@expo/vector-icons';
 import MemoContainer from '../components/MemoContainer';
@@ -8,7 +8,7 @@ import { color } from '../color';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const MainScreen = ({ navigation }) => {
+const MainScreen = ({ navigation, route }) => {
   const [memoList, setMemoList] = useState({});
   const [textSearch, setTextSearch] = useState('');
   const onChangeText = (event) => setTextSearch(event);
@@ -16,11 +16,21 @@ const MainScreen = ({ navigation }) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    const loadMemoList = async () => {
-      const s = await AsyncStorage.getItem('@memoList');
-      if (s != null) setMemoList(JSON.parse(s));
-    };
-    loadMemoList();
+    if (route.params && route.params.newMemoList) {
+      setMemoList(route.params.newMemoList);
+      Alert.alert(undefined, "다운로드 완료", [
+        { 
+          text: '확인',
+          onPress: () => navigation.pop() 
+        },
+      ]);
+    } else {
+      const loadMemoList = async () => {
+        const s = await AsyncStorage.getItem('@memoList');
+        if (s != null) setMemoList(JSON.parse(s));
+      };
+      loadMemoList();
+    }
   }, [isFocused]);
 
   const saveMemoList = async (toSave) => {
