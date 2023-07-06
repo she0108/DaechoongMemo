@@ -29,6 +29,8 @@ const LoginScreen = ({navigation}) => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        console.log(error);
+        //로그인 에러 핸들링 (사용자 없음 등)
       });
     }
 

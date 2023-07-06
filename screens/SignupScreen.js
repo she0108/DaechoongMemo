@@ -1,10 +1,11 @@
 import styled from 'styled-components/native';
 import { AntDesign } from '@expo/vector-icons';
 import { color } from '../color';
-import { Alert, TouchableOpacity } from 'react-native';
+import { Alert } from 'react-native';
 import { useState } from 'react';
-import { auth } from '../firebaseConfig';
+import { auth, database } from '../firebaseConfig';
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { ref, set } from "firebase/database";
 
 
 const SignupScreen = ({navigation}) => {
@@ -34,6 +35,10 @@ const SignupScreen = ({navigation}) => {
 
     const createAccount = () => {
         createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          set(ref(database, `users/${user.uid}/last-backup`), 0);
+        })
         .then(() => {
           Alert.alert("회원가입 완료", undefined, [
             {text: '확인',
@@ -56,8 +61,11 @@ const SignupScreen = ({navigation}) => {
         case 'auth/invalid-email':
           errorMessage = "유효하지 않은 이메일입니다";
           break;
+        case 'auth/email-already-in-use':
+          errorMessage = "이미 가입된 이메일입니다";
+          break;
         case 'auth/weak-password':
-          errorMessage = "보안에 취약한 비밀번호입니다";
+          errorMessage = "비밀번호는 8자리 이상의 영문, 숫자, 기호로 이루어져야 합니다";
           break;
         default: 
           errorMessage = errorCode;
