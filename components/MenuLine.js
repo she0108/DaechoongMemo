@@ -10,7 +10,7 @@ import { color } from '../color';
 const MenuLine = ({ icon, text }) => {
   const navigation = useNavigation();
   const nav = {
-    계정: () => console.log('메뉴 - 계정'),
+    계정: () => navigation.navigate('AccountScreen'),
     백업: () => console.log('메뉴 - 백업'),
     비밀번호: async () => {
       const PIN = await AsyncStorage.getItem('@PIN');

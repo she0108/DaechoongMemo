@@ -74,7 +74,7 @@ const MemoContainer = ({ k, memoList, setMemoList }) => {
 
 const Container = styled.TouchableOpacity`
   background-color: ${color.lightgrey};
-  border-radius: 7px;
+  border-radius: 7%;
   margin-bottom: 10px;
   padding: 12px;
 `;

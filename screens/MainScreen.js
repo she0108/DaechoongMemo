@@ -154,7 +154,7 @@ const Header = styled.View`
 
 const HeaderText = styled.Text`
   font-size: 30px;
-  font-weight: 600;
+  font-weight: 900;
   color: ${color.black};
 `;
 
