@@ -63,14 +63,16 @@ const MemoContainer = ({ k, memoList, setMemoList }) => {
     <Container
       onPress={() => checkLocked()}
       onLongPress={() => deleteMemo(k)}>
-      <Title numberOfLines={1}>{memoList[k].title}</Title>
+      <TitleContainer>
+        <Title numberOfLines={1}>{memoList[k].title}</Title>
+        <LockContainer>
+          {memoList[k].locked && <LockIcon name="lock"/>}
+        </LockContainer>
+        <PinContainer onPress={() => setPinned(k)}>
+          <PinIcon name="push-pin" pinned={memoList[k].pinned}/>
+        </PinContainer>
+      </TitleContainer>
       <Content numberOfLines={3}>{memoList[k].locked ? null : memoList[k].content}</Content>
-      <LockContainer>
-        {memoList[k].locked && <LockIcon name="lock"/>}
-      </LockContainer>
-      <PinContainer onPress={() => setPinned(k)}>
-        <PinIcon name="push-pin" pinned={memoList[k].pinned}/>
-      </PinContainer>
     </Container>
   );
 };
@@ -82,12 +84,18 @@ const Container = styled.TouchableOpacity`
   padding: 12px;
 `;
 
+const TitleContainer = styled.View`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+`;
+
 const Title = styled.Text`
   color: ${color.black};
   font-size: 19px;
   font-weight: 500;
   margin-bottom: 4px;
-  margin-right: 20px;
+  flex-shrink: 1;
 `;
 
 const Content = styled.Text`
@@ -96,9 +104,9 @@ const Content = styled.Text`
 `;
 
 const LockContainer = styled.View`
-  position: absolute;
-  top: 12px;
-  right: 35px;
+  flex-grow: 1;
+  margin-left: 8px;
+  margin-right: 3px;
 `;
 
 const LockIcon = styled(FontAwesome)`
@@ -107,9 +115,7 @@ const LockIcon = styled(FontAwesome)`
 `;
 
 const PinContainer = styled.TouchableOpacity`
-  position: absolute;
-  top: 12px;
-  right: 8px;
+  margin-left: 3px;
 `;
 
 const PinIcon = styled(MaterialIcons)`
