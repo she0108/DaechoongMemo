@@ -16,20 +16,22 @@ const MainScreen = ({ navigation, route }) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (route.params && route.params.newMemoList) {
-      setMemoList(route.params.newMemoList);
-      Alert.alert(undefined, "다운로드 완료", [
-        { 
-          text: '확인',
-          onPress: () => navigation.pop() 
-        },
-      ]);
-    } else {
-      const loadMemoList = async () => {
-        const s = await AsyncStorage.getItem('@memoList');
-        if (s != null) setMemoList(JSON.parse(s));
-      };
-      loadMemoList();
+    if (isFocused) {
+      if (route.params && route.params.newMemoList) {
+        setMemoList(route.params.newMemoList);
+        Alert.alert(undefined, "다운로드 완료", [
+          { 
+            text: '확인',
+            onPress: () => navigation.navigate("MainScreen")
+          },
+        ]);
+      } else {
+        const loadMemoList = async () => {
+          const s = await AsyncStorage.getItem('@memoList');
+          if (s != null) setMemoList(JSON.parse(s));
+        };
+        loadMemoList();
+      }
     }
   }, [isFocused]);
 
