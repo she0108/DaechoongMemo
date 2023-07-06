@@ -31,7 +31,7 @@ const LoginScreen = ({navigation}) => {
                 style: 'destructive',
                 onPress: async () => {
                   await downloadData(user);
-                  downloadSuccessful();
+                  // downloadSuccessful();
                 },
               },
               { 
@@ -54,19 +54,11 @@ const LoginScreen = ({navigation}) => {
       .then((snapshot)=> {
         if (snapshot.exists()) {
           //setMemoList(snapshot.val());
+          navigation.navigate("MainScreen", { newMemoList: snapshot.val()});
         }
       })
     }
 
-    const downloadSuccessful = () => {
-      console.log("downloadSuccessful");
-      Alert.alert(undefined, "다운로드 완료", [
-        { 
-          text: '확인',
-          onPress: () => navigation.pop() 
-        },
-      ]);
-    }
 
     return (
         <Container>
