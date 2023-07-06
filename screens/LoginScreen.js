@@ -1,9 +1,11 @@
 import styled from 'styled-components/native';
+import { Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { color } from '../color';
 import { useState } from 'react';
-import { auth } from '../firebaseConfig';
+import { auth, database } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { ref, get } from "firebase/database";
 import MainTextButton from '../components/Login/MainTextButton';
 import SubTextButton from '../components/Login/SubTextButton';
 
@@ -18,20 +20,52 @@ const LoginScreen = ({navigation}) => {
     const login = () => {
       signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in 
+        // 백업 데이터가 존재한다면 동기화 여부 묻기
         const user = userCredential.user;
-        // ...
-      })
-      .then(() => {
-        // 메뉴로 돌아가기
-        navigation.pop();
-      })
+        get(ref(database, `users/${user.uid}/last-backup`)).then((snapshot)=> {
+          console.log(snapshot.exists(), snapshot.val());
+          if (snapshot.exists() && snapshot.val() != 0) {
+            Alert.alert("백업 기록 존재", "백업된 데이터를 다운로드하시겠습니까?", [
+              {
+                text: '예',
+                style: 'destructive',
+                onPress: async () => {
+                  await downloadData(user);
+                  downloadSuccessful();
+                },
+              },
+              { 
+                text: '아니오',
+                onPress: () => navigation.pop() 
+              },
+            ]);
+          }})})
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(error);
         //로그인 에러 핸들링 (사용자 없음 등)
       });
+    }
+
+    const downloadData = async (user) => {
+      console.log("downloadData");
+      get(ref(database, `backup-data/${user.uid}`))
+      .then((snapshot)=> {
+        if (snapshot.exists()) {
+          //setMemoList(snapshot.val());
+        }
+      })
+    }
+
+    const downloadSuccessful = () => {
+      console.log("downloadSuccessful");
+      Alert.alert(undefined, "다운로드 완료", [
+        { 
+          text: '확인',
+          onPress: () => navigation.pop() 
+        },
+      ]);
     }
 
     return (
