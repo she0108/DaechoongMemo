@@ -1,7 +1,7 @@
 import { Alert } from 'react-native';
 import styled from 'styled-components/native';
 
-import { MaterialIcons } from '@expo/vector-icons';
+import { EvilIcons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -65,6 +65,9 @@ const MemoContainer = ({ k, memoList, setMemoList }) => {
       onLongPress={() => deleteMemo(k)}>
       <Title numberOfLines={1}>{memoList[k].title}</Title>
       <Content numberOfLines={3}>{memoList[k].locked ? null : memoList[k].content}</Content>
+      <LockContainer>
+        {memoList[k].locked && <LockIcon name="lock"/>}
+      </LockContainer>
       <PinContainer onPress={() => setPinned(k)}>
         <PinIcon name="push-pin" pinned={memoList[k].pinned}/>
       </PinContainer>
@@ -90,6 +93,17 @@ const Title = styled.Text`
 const Content = styled.Text`
   color: ${color.darkgrey};
   font-size: 15px;
+`;
+
+const LockContainer = styled.View`
+  position: absolute;
+  top: 12px;
+  right: 35px;
+`;
+
+const LockIcon = styled(FontAwesome)`
+  font-size: 20px;
+  color: ${color.darkgrey};
 `;
 
 const PinContainer = styled.TouchableOpacity`
