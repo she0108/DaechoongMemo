@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { StatusBar, ScrollView, TouchableWithoutFeedback, Keyboard, Alert, useColorScheme } from 'react-native';
+import { StatusBar, ScrollView, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import styled from 'styled-components/native';
 import { useTheme, useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { EvilIcons, FontAwesome5, Feather } from '@expo/vector-icons';
-import { light, dark, color } from '../color';
 import MemoContainer from '../components/MemoContainer';
 
 

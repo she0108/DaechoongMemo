@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import { Alert } from 'react-native';
 import styled from 'styled-components/native';
+import { useTheme } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
 import { auth, database } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { ref, get } from "firebase/database";
-import { color } from '../color';
 import MainTextButton from '../components/Login/MainTextButton';
 import SubTextButton from '../components/Login/SubTextButton';
 
 
 const LoginScreen = ({navigation}) => {
+  const { colors } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -59,13 +60,13 @@ const LoginScreen = ({navigation}) => {
 
 
   return (
-    <Container>
+    <Container style={{backgroundColor: colors.white}}>
       <HeaderBar>
         <BackButton onPress={() => navigation.pop()}>
-          <BackIcon name="arrowleft"/>
+          <BackIcon name="arrowleft" style={{color: colors.black}}/>
         </BackButton>
       </HeaderBar>
-      <HeaderText>로그인</HeaderText>
+      <HeaderText style={{color: colors.black}}>로그인</HeaderText>
       <LoginInput
         autoFocus={true}
         autoComplete="email"
@@ -74,14 +75,16 @@ const LoginScreen = ({navigation}) => {
         returnKeyType="done"
         placeholder="이메일"
         value={email}
-        onChangeText={onChangeEmail}/>
+        onChangeText={onChangeEmail}
+        style={{backgroundColor: colors.gray50, color: colors.black}}/>
       <LoginInput
         secureTextEntry={true}
         autoCapitalize="none"
         returnKeyType="done"
         placeholder="비밀번호"
         value={password}
-        onChangeText={onChangePassword}/>
+        onChangeText={onChangePassword}
+        style={{backgroundColor: colors.gray50, color: colors.black}}/>
       <MainTextButton text="로그인" onPress={login}/>
       <SubButtonContainer>
         <SubTextButton text="회원가입하기" onPress={() => navigation.navigate("SignupScreen")} />
@@ -98,7 +101,6 @@ const Container = styled.View`
   padding-top: 47px;
   padding-bottom: 34px; 
   padding-horizontal: 15px;
-  background-color: ${color.white};
   align-items: center;
 `;
 
@@ -116,22 +118,19 @@ const BackButton = styled.TouchableOpacity``;
 
 const BackIcon = styled(AntDesign)`
   font-size: 25px;
-  color: ${color.black};
 `;
 
 const HeaderText = styled.Text`
   font-size: 28px;
   font-weight: 700;
-  margin-top: 30px;
+  margin-top: 25px;
   margin-bottom: 40px;
-  color: ${color.black};
 `;
 
 const LoginInput = styled.TextInput`
   font-size: 16px;
   width: 80%;
   border-radius: 5px;
-  background-color: ${color.gray50};
   padding: 12px;
   margin-bottom: 25px;
 `;

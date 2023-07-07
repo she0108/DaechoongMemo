@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { Alert } from 'react-native';
 import styled from 'styled-components/native';
+import { useTheme } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
 import { auth, database } from '../firebaseConfig';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { ref, set } from "firebase/database";
-import { color } from '../color';
 
 
 const SignupScreen = ({navigation}) => {
+  const { colors } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState('');
@@ -78,13 +79,13 @@ const SignupScreen = ({navigation}) => {
 
 
   return (
-    <Container>
+    <Container style={{backgroundColor: colors.white}}>
       <HeaderBar>
         <BackButton onPress={() => navigation.pop()}>
-          <BackIcon name="arrowleft"/>
+          <BackIcon name="arrowleft" style={{color: colors.black}}/>
         </BackButton>
       </HeaderBar>
-      <HeaderText>회원가입</HeaderText>
+      <HeaderText style={{color: colors.black}}>회원가입</HeaderText>
       <LoginInput
         autoFocus={true}
         autoComplete="email"
@@ -93,21 +94,24 @@ const SignupScreen = ({navigation}) => {
         returnKeyType="done"
         placeholder="이메일"
         value={email}
-        onChangeText={onChangeEmail}/>
+        onChangeText={onChangeEmail}
+        style={{backgroundColor: colors.gray50, color: colors.black}}/>
       <LoginInput
         secureTextEntry={true}
         autoCapitalize="none"
         returnKeyType="done"
         placeholder="비밀번호"
         value={password}
-        onChangeText={onChangePassword}/>
+        onChangeText={onChangePassword}
+        style={{backgroundColor: colors.gray50, color: colors.black}}/>
       <LoginInput
         secureTextEntry={true}
         autoCapitalize="none"
         returnKeyType="done"
         placeholder="비밀번호 확인"
         value={password2}
-        onChangeText={onChangePassword2}/>
+        onChangeText={onChangePassword2}
+        style={{backgroundColor: colors.gray50, color: colors.black}}/>
       <SignupButton 
         title="계정 생성하기" 
         onPress={signup} 
@@ -123,7 +127,6 @@ const Container = styled.View`
   padding-top: 47px;
   padding-bottom: 34px; 
   padding-horizontal: 15px;
-  background-color: ${color.white};
   align-items: center;
 `;
 
@@ -141,21 +144,19 @@ const BackButton = styled.TouchableOpacity``;
 
 const BackIcon = styled(AntDesign)`
   font-size: 25px;
-  color: ${color.black};
 `;
 
 const HeaderText = styled.Text`
   font-size: 28px;
   font-weight: 700;
-  margin-top: 30px;
-  margin-bottom: 40px;
+  margin-top: 25px;
+  margin-bottom: 35px;
 `;
 
 const LoginInput = styled.TextInput`
   font-size: 16px;
   width: 80%;
   border-radius: 5px;
-  background-color: ${color.lightgrey};
   padding: 12px;
   margin-bottom: 25px;
 `;
