@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import {Container, BackButton, BackIcon, PromptText, ErrorText, PinInput} from './PINScreenStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Container, BackButton, BackIcon, PromptText, ErrorText, PinInput} from './PINScreenStyles';
 
 
 const PINScreen4 = ({ navigation, route }) => {
@@ -32,6 +32,7 @@ const PINScreen4 = ({ navigation, route }) => {
       }
     }
   };
+
 
   return (
     <Container>

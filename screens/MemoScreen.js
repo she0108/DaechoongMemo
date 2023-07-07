@@ -1,20 +1,8 @@
-import {
-  StatusBar,
-  TouchableWithoutFeedback,
-  ScrollView,
-  Keyboard,
-  Alert,
-} from 'react-native';
-import styled from 'styled-components/native';
 import { useState, useEffect } from 'react';
+import { StatusBar, TouchableWithoutFeedback, ScrollView, Keyboard, Alert } from 'react-native';
+import styled from 'styled-components/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  EvilIcons,
-  AntDesign,
-  MaterialCommunityIcons,
-  FontAwesome,
-  FontAwesome5
-} from '@expo/vector-icons';
+import { AntDesign, MaterialCommunityIcons, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { color } from '../color';
 
 
@@ -27,6 +15,9 @@ const MemoScreen = ({ navigation, route }) => {
   const [pinned, setPinned] = useState(false);
   const [locked, setLocked] = useState(false);
 
+  const onChangeTitle = (event) => setTitle(event);
+  const onChangeContent = (event) => setContent(event);
+
   useEffect(() => loadMemo(), []);
 
   const loadMemo = () => {
@@ -36,9 +27,6 @@ const MemoScreen = ({ navigation, route }) => {
     setPinned(memoList[key].pinned);
     setLocked(memoList[key].locked);
   };
-
-  const onChangeTitle = (event) => setTitle(event);
-  const onChangeContent = (event) => setContent(event);
 
   useEffect(() => {
     const newDate = new Date();
@@ -61,18 +49,6 @@ const MemoScreen = ({ navigation, route }) => {
     await AsyncStorage.setItem('@memoList', JSON.stringify(toSave));
   };
 
-  const goBack = () => {
-    if (
-      title != memoList[key].title ||
-      content != memoList[key].content ||
-      pinned != memoList[key].pinned ||
-      locked != memoList[key].locked
-    ) {
-      saveChange();
-    }
-    navigation.pop();
-  };
-
   const deleteMemo = () => {
     Alert.alert('이 메모를 삭제하시겠습니까?', undefined, [
       {
@@ -87,24 +63,25 @@ const MemoScreen = ({ navigation, route }) => {
       },
       { text: '취소' },
     ]);
-  }
+  };
+
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <Container>
-      <OptionContainer>
-            <OptionButton onPress={() => setPinned(!pinned)}>
-              <PinIcon name={pinned ? "pin" : "pin-outline"}/>
-            </OptionButton>
-            <Line/>
-            <OptionButton onPress={() => setLocked(!locked)}>
-              <LockIcon name={locked ? "lock" : "unlock-alt"}/>
-            </OptionButton>
-            <Line/>
-            <OptionButton onPress={() => deleteMemo()}>
-              <DeleteIcon name="trash"/>
-            </OptionButton>
-          </OptionContainer>
+        <OptionContainer>
+          <OptionButton onPress={() => setPinned(!pinned)}>
+            <PinIcon name={pinned ? "pin" : "pin-outline"}/>
+          </OptionButton>
+          <Line/>
+          <OptionButton onPress={() => setLocked(!locked)}>
+            <LockIcon name={locked ? "lock" : "unlock-alt"}/>
+          </OptionButton>
+          <Line/>
+          <OptionButton onPress={() => deleteMemo()}>
+            <DeleteIcon name="trash"/>
+          </OptionButton>
+        </OptionContainer>
         <StatusBar/>
         <HeaderBar>
           <BackButton onPress={() => navigation.pop()}>
@@ -133,6 +110,8 @@ const MemoScreen = ({ navigation, route }) => {
   );
 };
 
+
+//styled
 const Container = styled.View`
   height: 100%;
   padding-top: 47px;

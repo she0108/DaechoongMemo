@@ -19,6 +19,7 @@ const PINScreen1 = ({ navigation, route }) => {
     }
   };
 
+
   return (
     <Container>
       <BackButton onPress={() => navigation.pop()}>

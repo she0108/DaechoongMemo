@@ -1,18 +1,17 @@
-import { StatusBar, Alert, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StatusBar, Alert } from 'react-native';
 import styled from 'styled-components/native';
-import { AntDesign, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { color } from '../color';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { auth, database } from '../firebaseConfig';
 import { signOut, onAuthStateChanged } from "firebase/auth";
 import { ref, get, set } from "firebase/database";
+import { color } from '../color';
 
 
 const MenuScreen = ({ navigation }) => {
   const [user, setUser] = useState(null);
   const [lastBackup, setLastBackup] = useState("-");
-
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -67,8 +66,8 @@ const MenuScreen = ({ navigation }) => {
   const handleBackup = () => {
     if (!user) {
       Alert.alert('로그인 필요', "로그아웃 상태에서는 백업이 불가능합니다", [
-      { text: '확인' },
-    ]);
+        { text: '확인' },
+      ]);
     } else {
       // 1. 로컬에 저장된 memoList를 database에 업로드
       const uploadMemoList = async () => {
@@ -78,7 +77,7 @@ const MenuScreen = ({ navigation }) => {
         } else {
           set(ref(database, 'backup-data/' + user.uid), {});
         }
-      }
+      };
       uploadMemoList();
       // 2. 마지막 백업 시각 업데이트
       const newDate = new Date();
@@ -105,62 +104,63 @@ const MenuScreen = ({ navigation }) => {
       <MenuSection>
         <MenuName>계정</MenuName>
         <MenuBox>
-        <MenuLine>
-          <MenuTextMain>이메일</MenuTextMain>
-          <MenuTextSub c={color.gray500} numberOfLines={1} ellipsizeMode="tail">{user ? user.email : "-"}</MenuTextSub>
-          <MenuTextTouchable onPress={user ? handleLogout : handleLogin}>
-            <MenuTextSub c={user ? color.red : color.blue}>{user ? "로그아웃" : "로그인"}</MenuTextSub>
-          </MenuTextTouchable>
-        </MenuLine>
-        {/* <MenuLine>
-          <MenuTextMain>이메일 변경</MenuTextMain>
-          <MenuTextTouchable>
-            <MenuTextSub c={color.gray500}>{">"}</MenuTextSub>
-          </MenuTextTouchable>
-        </MenuLine>
-        <MenuLine>
-          <MenuTextMain>비밀번호 재설정</MenuTextMain>
-          <MenuTextTouchable>
-            <MenuTextSub c={color.gray500}>{">"}</MenuTextSub>
-          </MenuTextTouchable>
-        </MenuLine> */}
-        <MenuLine>
-          <MenuTextMain>백업</MenuTextMain>
-          <MenuTextTouchable onPress={handleBackup}>
-            {user && <Ionicons name="cloud-upload-outline" size={21} color={color.gray500} style={{marginRight: 8}}/>}
-            <MenuTextSub c={color.gray500}>{user ? lastBackup : "로그인 필요"}</MenuTextSub>
-          </MenuTextTouchable>
-        </MenuLine>
+          <MenuLine>
+            <MenuTextMain>이메일</MenuTextMain>
+            <MenuTextSub c={color.gray500} numberOfLines={1} ellipsizeMode="tail">{user ? user.email : "-"}</MenuTextSub>
+            <MenuTextTouchable onPress={user ? handleLogout : handleLogin}>
+              <MenuTextSub c={user ? color.red : color.blue}>{user ? "로그아웃" : "로그인"}</MenuTextSub>
+            </MenuTextTouchable>
+          </MenuLine>
+          {/* <MenuLine>
+            <MenuTextMain>이메일 변경</MenuTextMain>
+            <MenuTextTouchable>
+              <MenuTextSub c={color.gray500}>{">"}</MenuTextSub>
+            </MenuTextTouchable>
+          </MenuLine>
+          <MenuLine>
+            <MenuTextMain>비밀번호 재설정</MenuTextMain>
+            <MenuTextTouchable>
+              <MenuTextSub c={color.gray500}>{">"}</MenuTextSub>
+            </MenuTextTouchable>
+          </MenuLine> */}
+          <MenuLine>
+            <MenuTextMain>백업</MenuTextMain>
+            <MenuTextTouchable onPress={handleBackup}>
+              {user && <Ionicons name="cloud-upload-outline" size={21} color={color.gray500} style={{marginRight: 8}}/>}
+              <MenuTextSub c={color.gray500}>{user ? lastBackup : "로그인 필요"}</MenuTextSub>
+            </MenuTextTouchable>
+          </MenuLine>
         </MenuBox>
       </MenuSection>
-
       <MenuSection>
         <MenuName>설정</MenuName>
         <MenuBox>
-        <MenuLine>
-          <MenuTextMain>테마</MenuTextMain>
-          <MenuTextTouchable>
-            <MenuTextSub c={color.gray500}>밝게</MenuTextSub>
-          </MenuTextTouchable>
-        </MenuLine>
-        <MenuLine>
-          <MenuTextMain>글꼴</MenuTextMain>
-          <MenuTextTouchable>
-            <MenuTextSub c={color.gray500}>기본</MenuTextSub>
-          </MenuTextTouchable>
-        </MenuLine>
-        <MenuLine>
-          <MenuTextMain>메모 잠금</MenuTextMain>
-          <MenuTextTouchable onPress={handleChangePin}>
-            <MenuTextSub c={color.blue}>PIN 설정 →</MenuTextSub>
-          </MenuTextTouchable>
-        </MenuLine>
+          <MenuLine>
+            <MenuTextMain>테마</MenuTextMain>
+            <MenuTextTouchable>
+              <MenuTextSub c={color.gray500}>밝게</MenuTextSub>
+            </MenuTextTouchable>
+          </MenuLine>
+          <MenuLine>
+            <MenuTextMain>글꼴</MenuTextMain>
+            <MenuTextTouchable>
+              <MenuTextSub c={color.gray500}>기본</MenuTextSub>
+            </MenuTextTouchable>
+          </MenuLine>
+          <MenuLine>
+            <MenuTextMain>메모 잠금</MenuTextMain>
+            <MenuTextTouchable onPress={handleChangePin}>
+              <MenuTextSub c={color.blue}>PIN 설정 →</MenuTextSub>
+            </MenuTextTouchable>
+          </MenuLine>
         </MenuBox>
       </MenuSection>
     </Container>
   );
 };
 
+
+//styled
 const Container = styled.View`
   height: 100%;
   padding-top: 47px;

@@ -1,14 +1,11 @@
 import { Alert } from 'react-native';
 import styled from 'styled-components/native';
-
-import { EvilIcons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
-
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import { color } from '../color';
-
 const STORAGE_KEY = '@memoList';
+
 
 const MemoContainer = ({ k, memoList, setMemoList }) => {
   const navigation = useNavigation();
@@ -57,7 +54,8 @@ const MemoContainer = ({ k, memoList, setMemoList }) => {
     } else {
       navigation.navigate('MemoScreen', { memoKey: k, memoList: memoList });
     }
-  }
+  };
+
 
   return (
     <Container
@@ -77,6 +75,8 @@ const MemoContainer = ({ k, memoList, setMemoList }) => {
   );
 };
 
+
+//styled
 const Container = styled.TouchableOpacity`
   background-color: ${color.gray50};
   border-radius: 7%;

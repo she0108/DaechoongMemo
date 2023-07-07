@@ -2,6 +2,7 @@ import styled from 'styled-components/native';
 import { AntDesign } from '@expo/vector-icons';
 import { color } from '../../color';
 
+//styled
 const Container = styled.View`
   height: 100%;
   padding-top: 47px;

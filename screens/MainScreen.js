@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useIsFocused } from '@react-navigation/native';
 import { StatusBar, ScrollView, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import styled from 'styled-components/native';
-import { EvilIcons, FontAwesome5, Feather } from '@expo/vector-icons';
-import MemoContainer from '../components/MemoContainer';
-import { color } from '../color';
+import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { EvilIcons, FontAwesome5, Feather } from '@expo/vector-icons';
+import { color } from '../color';
+import MemoContainer from '../components/MemoContainer';
 
 
 const MainScreen = ({ navigation, route }) => {
@@ -35,24 +35,6 @@ const MainScreen = ({ navigation, route }) => {
     }
   }, [isFocused]);
 
-  const saveMemoList = async (toSave) => {
-    await AsyncStorage.setItem('@memoList', JSON.stringify(toSave));
-  };
-
-  //title & content 둘 다 비어있는 메모는 삭제
-  const trimMemoList = () => {
-    if (isFocused) {
-      const newList = { ...memoList };
-      const blankKeys = Object.keys(memoList).filter(
-        (key) => isBlank(memoList[key].title) && isBlank(memoList[key].content)
-      );
-      blankKeys.forEach((key) => delete newList[key]);
-      setMemoList(newList);
-    }
-  };
-
-  //useEffect(() => trimMemoList(), [isFocused, memoList]);
-
   const createMemo = () => {
     const key = Date.now();
     const newList = { ...memoList };
@@ -65,6 +47,7 @@ const MainScreen = ({ navigation, route }) => {
     };
     navigation.navigate('MemoScreen', { memoKey: key, memoList: newList });
   };
+
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -148,6 +131,8 @@ const MainScreen = ({ navigation, route }) => {
   );
 };
 
+
+//styled
 const Container = styled.View`
   height: 100%;
   padding-top: 47px;
