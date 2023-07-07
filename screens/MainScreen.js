@@ -9,17 +9,9 @@ import MemoContainer from '../components/MemoContainer';
 
 
 const MainScreen = ({ navigation, route }) => {
+  const { colors } = useTheme();
   const [memoList, setMemoList] = useState({});
   const [textSearch, setTextSearch] = useState('');
-
-  const colorScheme = useColorScheme();
-  const themeColor = (color) => {
-    if (colorScheme === 'dark') {
-      return dark[color];
-    } else {
-      return light[color];
-    }
-  }
 
   const onChangeText = (event) => setTextSearch(event);
 
@@ -61,24 +53,24 @@ const MainScreen = ({ navigation, route }) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <Container style={{backgroundColor: themeColor('white')}}>
+      <Container style={{backgroundColor: colors.white}}>
         <StatusBar/>
         <Header>
-          <HeaderText style={{color: themeColor('black')}}>대충메모</HeaderText>
+          <HeaderText style={{color: colors.black}}>대충메모</HeaderText>
           <MenuButton onPress={() => navigation.navigate('MenuScreen')}>
-            <MenuIcon name="navicon" style={{color: themeColor('black')}}/>
+            <MenuIcon name="navicon" style={{color: colors.black}}/>
           </MenuButton>
         </Header>
-        <SearchContainer style={{borderColor: themeColor('gray100')}}>
-          <SearchIcon name="search" style={{color: themeColor('gray200')}}/>
+        <SearchContainer style={{borderColor: colors.gray100}}>
+          <SearchIcon name="search" style={{color: colors.gray200}}/>
           <SearchInput 
             returnKeyType="search"
             onChangeText={onChangeText}
             value={textSearch}
             placeholder="메모 검색"
-            placeholderTextColor={themeColor('gray200')}
+            placeholderTextColor={colors.gray200}
             clearButtonMode="while-editing"
-            style={{color: themeColor('black')}}/>
+            style={{color: colors.black}}/>
         </SearchContainer>
         <ScrollView>
           {Object.keys(memoList)
@@ -134,8 +126,8 @@ const MainScreen = ({ navigation, route }) => {
                />
              ))}
         </ScrollView>
-        <FloatingButton onPress={createMemo} style={{backgroundColor: themeColor('gray900')}}>
-          <FloatingButtonIcon name="pen" style={{color: themeColor('white')}}/>
+        <FloatingButton onPress={createMemo} style={{backgroundColor: colors.gray900}}>
+          <FloatingButtonIcon name="pen" style={{color: colors.white}}/>
         </FloatingButton>
       </Container>
     </TouchableWithoutFeedback>

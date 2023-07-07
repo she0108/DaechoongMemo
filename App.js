@@ -1,5 +1,7 @@
+import { useColorScheme } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { DarkTheme, LightTheme } from './colorTheme';
 import * as Font from 'expo-font';
 
 import MainScreen from './screens/MainScreen';
@@ -15,9 +17,10 @@ import SignupScreen from './screens/SignupScreen';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const scheme = useColorScheme();
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={scheme === 'dark' ? DarkTheme : LightTheme}>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
         backBehavior="history">

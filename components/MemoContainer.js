@@ -9,15 +9,7 @@ const STORAGE_KEY = '@memoList';
 
 const MemoContainer = ({ k, memoList, setMemoList }) => {
   const navigation = useNavigation();
-  
-  const colorScheme = useColorScheme();
-  const themeColor = (color) => {
-    if (colorScheme === 'dark') {
-      return dark[color];
-    } else {
-      return light[color];
-    }
-  }
+  const { colors } = useTheme();
 
   const setPinned = (key) => {
     const newList = { ...memoList };
@@ -70,17 +62,17 @@ const MemoContainer = ({ k, memoList, setMemoList }) => {
     <Container
       onPress={() => checkLocked()}
       onLongPress={() => deleteMemo(k)}
-      style={{backgroundColor: themeColor('gray50')}}>
+      style={{backgroundColor: colors.gray50}}>
       <TitleContainer>
-        <Title numberOfLines={1} style={{color: themeColor('black')}}>{memoList[k].title}</Title>
+        <Title numberOfLines={1} style={{color: colors.black}}>{memoList[k].title}</Title>
         <LockContainer>
-          {memoList[k].locked && <LockIcon name="lock" style={{color: themeColor('gray500')}}/>}
+          {memoList[k].locked && <LockIcon name="lock" style={{color: colors.gray500}}/>}
         </LockContainer>
         <PinContainer onPress={() => setPinned(k)}>
-          <PinIcon name="push-pin" style={{color: memoList[k].pinned ? themeColor('gray500') : themeColor('gray200')}}/>
+          <PinIcon name="push-pin" style={{color: memoList[k].pinned ? colors.gray500 : colors.gray200}}/>
         </PinContainer>
       </TitleContainer>
-      <Content numberOfLines={3} style={{color: themeColor('gray500')}}>{memoList[k].locked ? null : memoList[k].content}</Content>
+      <Content numberOfLines={3} style={{color: colors.gray500}}>{memoList[k].locked ? null : memoList[k].content}</Content>
     </Container>
   );
 };
