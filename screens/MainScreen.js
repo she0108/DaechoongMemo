@@ -207,7 +207,7 @@ const FloatingButton = styled.TouchableOpacity`
   bottom: 40px;
   width: 80px;
   height: 80px;
-  background-color: ${color.black};
+  background-color: ${color.gray900};
   border-radius: 50%;
   justify-content: center;
   align-items: center;
