@@ -1,16 +1,26 @@
 import { useState, useEffect } from 'react';
-import { StatusBar, ScrollView, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+import { StatusBar, ScrollView, TouchableWithoutFeedback, Keyboard, Alert, useColorScheme } from 'react-native';
 import styled from 'styled-components/native';
-import { useIsFocused } from '@react-navigation/native';
+import { useTheme, useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { EvilIcons, FontAwesome5, Feather } from '@expo/vector-icons';
-import { color } from '../color';
+import { light, dark, color } from '../color';
 import MemoContainer from '../components/MemoContainer';
 
 
 const MainScreen = ({ navigation, route }) => {
   const [memoList, setMemoList] = useState({});
   const [textSearch, setTextSearch] = useState('');
+
+  const colorScheme = useColorScheme();
+  const themeColor = (color) => {
+    if (colorScheme === 'dark') {
+      return dark[color];
+    } else {
+      return light[color];
+    }
+  }
+
   const onChangeText = (event) => setTextSearch(event);
 
   const isFocused = useIsFocused();
@@ -51,23 +61,24 @@ const MainScreen = ({ navigation, route }) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <Container>
+      <Container style={{backgroundColor: themeColor('white')}}>
         <StatusBar/>
         <Header>
-          <HeaderText>대충메모</HeaderText>
+          <HeaderText style={{color: themeColor('black')}}>대충메모</HeaderText>
           <MenuButton onPress={() => navigation.navigate('MenuScreen')}>
-            <MenuIcon name="navicon"/>
+            <MenuIcon name="navicon" style={{color: themeColor('black')}}/>
           </MenuButton>
         </Header>
-        <SearchContainer>
-          <SearchIcon name="search"/>
+        <SearchContainer style={{borderColor: themeColor('gray100')}}>
+          <SearchIcon name="search" style={{color: themeColor('gray200')}}/>
           <SearchInput 
             returnKeyType="search"
             onChangeText={onChangeText}
             value={textSearch}
             placeholder="메모 검색"
-            placeholderTextColor={color.gray200}
-            clearButtonMode="while-editing"/>
+            placeholderTextColor={themeColor('gray200')}
+            clearButtonMode="while-editing"
+            style={{color: themeColor('black')}}/>
         </SearchContainer>
         <ScrollView>
           {Object.keys(memoList)
@@ -123,8 +134,8 @@ const MainScreen = ({ navigation, route }) => {
                />
              ))}
         </ScrollView>
-        <FloatingButton onPress={createMemo}>
-          <FloatingButtonIcon name="pen"/>
+        <FloatingButton onPress={createMemo} style={{backgroundColor: themeColor('gray900')}}>
+          <FloatingButtonIcon name="pen" style={{color: themeColor('white')}}/>
         </FloatingButton>
       </Container>
     </TouchableWithoutFeedback>
@@ -138,7 +149,6 @@ const Container = styled.View`
   padding-top: 47px;
   padding-bottom: 34px; 
   padding-horizontal: 15px;
-  background-color: ${color.white};
 `;
 
 const Header = styled.View`
@@ -153,20 +163,17 @@ const Header = styled.View`
 const HeaderText = styled.Text`
   font-size: 30px;
   font-weight: 900;
-  color: ${color.black};
 `;
 
 const MenuButton = styled.TouchableOpacity``;
 
 const MenuIcon = styled(EvilIcons)`
   font-size: 35px;
-  color: ${color.black};
 `;
 
 const SearchContainer = styled.View`
   height: 40px;
   border-width: 2px;
-  border-color: ${color.gray100};
   border-radius: 50%;
   margin-bottom: 13px;
   flex-direction: row;
@@ -175,13 +182,11 @@ const SearchContainer = styled.View`
 
 const SearchIcon = styled(Feather)`
   font-size: 20px;
-  color: ${color.gray200};
   margin-left: 8px;
   margin-right: 5px;
 `;
 
 const SearchInput = styled.TextInput`
-  color: ${color.black};
   flex-grow: 1;
   font-size: 18px;
 `;
@@ -192,7 +197,6 @@ const FloatingButton = styled.TouchableOpacity`
   bottom: 40px;
   width: 80px;
   height: 80px;
-  background-color: ${color.gray900};
   border-radius: 50%;
   justify-content: center;
   align-items: center;
@@ -200,7 +204,6 @@ const FloatingButton = styled.TouchableOpacity`
 
 const FloatingButtonIcon = styled(FontAwesome5)`
   font-size: 25px;
-  color: ${color.white};
   top: -1px;
   left: 1px;
 `;

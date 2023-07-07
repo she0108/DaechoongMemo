@@ -1,14 +1,23 @@
-import { Alert } from 'react-native';
+import { Alert, useColorScheme } from 'react-native';
 import styled from 'styled-components/native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useTheme } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
-import { color } from '../color';
+import { light, dark } from '../color';
 const STORAGE_KEY = '@memoList';
 
 
 const MemoContainer = ({ k, memoList, setMemoList }) => {
   const navigation = useNavigation();
+  
+  const colorScheme = useColorScheme();
+  const themeColor = (color) => {
+    if (colorScheme === 'dark') {
+      return dark[color];
+    } else {
+      return light[color];
+    }
+  }
 
   const setPinned = (key) => {
     const newList = { ...memoList };
@@ -60,17 +69,18 @@ const MemoContainer = ({ k, memoList, setMemoList }) => {
   return (
     <Container
       onPress={() => checkLocked()}
-      onLongPress={() => deleteMemo(k)}>
+      onLongPress={() => deleteMemo(k)}
+      style={{backgroundColor: themeColor('gray50')}}>
       <TitleContainer>
-        <Title numberOfLines={1}>{memoList[k].title}</Title>
+        <Title numberOfLines={1} style={{color: themeColor('black')}}>{memoList[k].title}</Title>
         <LockContainer>
-          {memoList[k].locked && <LockIcon name="lock"/>}
+          {memoList[k].locked && <LockIcon name="lock" style={{color: themeColor('gray500')}}/>}
         </LockContainer>
         <PinContainer onPress={() => setPinned(k)}>
-          <PinIcon name="push-pin" pinned={memoList[k].pinned}/>
+          <PinIcon name="push-pin" style={{color: memoList[k].pinned ? themeColor('gray500') : themeColor('gray200')}}/>
         </PinContainer>
       </TitleContainer>
-      <Content numberOfLines={3}>{memoList[k].locked ? null : memoList[k].content}</Content>
+      <Content numberOfLines={3} style={{color: themeColor('gray500')}}>{memoList[k].locked ? null : memoList[k].content}</Content>
     </Container>
   );
 };
@@ -78,7 +88,6 @@ const MemoContainer = ({ k, memoList, setMemoList }) => {
 
 //styled
 const Container = styled.TouchableOpacity`
-  background-color: ${color.gray50};
   border-radius: 7%;
   margin-bottom: 10px;
   padding: 12px;
@@ -91,7 +100,6 @@ const TitleContainer = styled.View`
 `;
 
 const Title = styled.Text`
-  color: ${color.black};
   font-size: 19px;
   font-weight: 500;
   margin-bottom: 4px;
@@ -99,7 +107,6 @@ const Title = styled.Text`
 `;
 
 const Content = styled.Text`
-  color: ${color.gray500};
   font-size: 15px;
 `;
 
@@ -111,7 +118,6 @@ const LockContainer = styled.View`
 
 const LockIcon = styled(FontAwesome)`
   font-size: 20px;
-  color: ${color.gray500};
 `;
 
 const PinContainer = styled.TouchableOpacity`
@@ -121,7 +127,6 @@ const PinContainer = styled.TouchableOpacity`
 const PinIcon = styled(MaterialIcons)`
   font-size: 22px;
   transform: rotate(15deg);
-  color: ${props => props.pinned ? color.gray500 : color.gray200};
 `;
 
 export default MemoContainer;
