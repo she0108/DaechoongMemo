@@ -12,9 +12,6 @@ export const color = {
     gray900: '#303030',
     gray1000: '#1a1a1a',
     black: '#000000',
-    lightgrey: '#F2F3F4',
-    grey: '#D7D7D7',
-    darkgrey: '#8D8D8D',
     red: '#ec5446',
     blue: '#4084f5',
 }
