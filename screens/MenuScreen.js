@@ -26,7 +26,8 @@ const MenuScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (user) {
-      get(ref(database, `users/${user.uid}/last-backup`)).then((snapshot)=> {
+      get(ref(database, `users/${user.uid}/last-backup`))
+      .then((snapshot)=> {
       if (snapshot.exists()) {
         if (snapshot.val() == 0) {
           console.log("백업 기록이 존재하지 않습니다.");
@@ -38,6 +39,9 @@ const MenuScreen = ({ navigation }) => {
       } else {
         console.log("snapshot data doesn't exist");
       }})
+      .catch((error) => {
+        setLastBackup("백업 기록 불러오기 실패");
+      })
     }
   }, [user]);
 
@@ -148,7 +152,7 @@ const MenuScreen = ({ navigation }) => {
         <MenuLine>
           <MenuTextMain>메모 잠금</MenuTextMain>
           <MenuTextTouchable onPress={handleChangePin}>
-            <MenuTextSub c={color.blue}>PIN 변경 →</MenuTextSub>
+            <MenuTextSub c={color.blue}>PIN 설정 →</MenuTextSub>
           </MenuTextTouchable>
         </MenuLine>
         </MenuBox>
