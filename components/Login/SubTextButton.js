@@ -1,11 +1,12 @@
 import styled from 'styled-components/native';
-import { color } from '../../color';
+import { useTheme } from '@react-navigation/native';
 
 const SubTextButton = ({text, onPress}) => {
+    const { colors } = useTheme();
 
     return (
         <Container onPress={onPress}>
-            <InnerText>{text}</InnerText>
+            <InnerText style={{color: colors.gray500}}>{text}</InnerText>
         </Container>
     )
 }
@@ -19,6 +20,5 @@ const Container = styled.TouchableOpacity`
 
 const InnerText = styled.Text`
     font-size: 18px;
-    color: ${color.gray500};
     text-align: center;
 `;

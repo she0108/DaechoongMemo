@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { StatusBar, Alert } from 'react-native';
 import styled from 'styled-components/native';
+import { useTheme } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { auth, database } from '../firebaseConfig';
@@ -10,6 +11,7 @@ import { color } from '../color';
 
 
 const MenuScreen = ({ navigation }) => {
+  const { colors } = useTheme();
   const [user, setUser] = useState(null);
   const [lastBackup, setLastBackup] = useState("-");
 
@@ -94,63 +96,63 @@ const MenuScreen = ({ navigation }) => {
 
 
   return (
-    <Container>
+    <Container style={{backgroundColor: colors.white}}>
       <StatusBar/>
       <HeaderBar>
         <BackButton onPress={() => navigation.pop()}>
-          <BackIcon name="arrowleft"/>
+          <BackIcon name="arrowleft" style={{color: colors.black}}/>
         </BackButton>
       </HeaderBar>
       <MenuSection>
-        <MenuName>계정</MenuName>
-        <MenuBox>
+        <MenuName style={{color: colors.black}}>계정</MenuName>
+        <MenuBox style={{backgroundColor: colors.gray50}}>
           <MenuLine>
-            <MenuTextMain>이메일</MenuTextMain>
-            <MenuTextSub c={color.gray500} numberOfLines={1} ellipsizeMode="tail">{user ? user.email : "-"}</MenuTextSub>
+            <MenuTextMain style={{color: colors.black}}>이메일</MenuTextMain>
+            <MenuTextSub style={{color: colors.gray500}} numberOfLines={1} ellipsizeMode="tail">{user ? user.email : "-"}</MenuTextSub>
             <MenuTextTouchable onPress={user ? handleLogout : handleLogin}>
-              <MenuTextSub c={user ? color.red : color.blue}>{user ? "로그아웃" : "로그인"}</MenuTextSub>
+              <MenuTextSub style={{color: user ? colors.red : colors.blue}}>{user ? "로그아웃" : "로그인"}</MenuTextSub>
             </MenuTextTouchable>
           </MenuLine>
           {/* <MenuLine>
-            <MenuTextMain>이메일 변경</MenuTextMain>
+            <MenuTextMain style={{color: colors.black}}>이메일 변경</MenuTextMain>
             <MenuTextTouchable>
               <MenuTextSub c={color.gray500}>{">"}</MenuTextSub>
             </MenuTextTouchable>
           </MenuLine>
           <MenuLine>
-            <MenuTextMain>비밀번호 재설정</MenuTextMain>
+            <MenuTextMain style={{color: colors.black}}>비밀번호 재설정</MenuTextMain>
             <MenuTextTouchable>
               <MenuTextSub c={color.gray500}>{">"}</MenuTextSub>
             </MenuTextTouchable>
           </MenuLine> */}
           <MenuLine>
-            <MenuTextMain>백업</MenuTextMain>
+            <MenuTextMain style={{color: colors.black}}>백업</MenuTextMain>
             <MenuTextTouchable onPress={handleBackup}>
-              {user && <Ionicons name="cloud-upload-outline" size={21} color={color.gray500} style={{marginRight: 8}}/>}
-              <MenuTextSub c={color.gray500}>{user ? lastBackup : "로그인 필요"}</MenuTextSub>
+              {user && <Ionicons name="cloud-upload-outline" size={21} color={colors.gray500} style={{marginRight: 8}}/>}
+              <MenuTextSub style={{color: colors.gray500}}>{user ? lastBackup : "로그인 필요"}</MenuTextSub>
             </MenuTextTouchable>
           </MenuLine>
         </MenuBox>
       </MenuSection>
       <MenuSection>
-        <MenuName>설정</MenuName>
-        <MenuBox>
+        <MenuName style={{color: colors.black}}>설정</MenuName>
+        <MenuBox style={{backgroundColor: colors.gray50}}>
           <MenuLine>
-            <MenuTextMain>테마</MenuTextMain>
+            <MenuTextMain style={{color: colors.black}}>테마</MenuTextMain>
             <MenuTextTouchable>
-              <MenuTextSub c={color.gray500}>밝게</MenuTextSub>
+              <MenuTextSub style={{color: colors.gray500}}>밝게</MenuTextSub>
             </MenuTextTouchable>
           </MenuLine>
           <MenuLine>
-            <MenuTextMain>글꼴</MenuTextMain>
+            <MenuTextMain style={{color: colors.black}}>글꼴</MenuTextMain>
             <MenuTextTouchable>
-              <MenuTextSub c={color.gray500}>기본</MenuTextSub>
+              <MenuTextSub style={{color: colors.gray500}}>기본</MenuTextSub>
             </MenuTextTouchable>
           </MenuLine>
           <MenuLine>
-            <MenuTextMain>메모 잠금</MenuTextMain>
+            <MenuTextMain style={{color: colors.black}}>메모 잠금</MenuTextMain>
             <MenuTextTouchable onPress={handleChangePin}>
-              <MenuTextSub c={color.blue}>PIN 설정 →</MenuTextSub>
+              <MenuTextSub style={{color: colors.blue}}>PIN 설정 →</MenuTextSub>
             </MenuTextTouchable>
           </MenuLine>
         </MenuBox>
@@ -166,7 +168,6 @@ const Container = styled.View`
   padding-top: 47px;
   padding-bottom: 34px; 
   padding-horizontal: 15px;
-  background-color: ${color.white};
 `;
 
 const HeaderBar = styled.View`
@@ -182,7 +183,6 @@ const BackButton = styled.TouchableOpacity``;
 
 const BackIcon = styled(AntDesign)`
   font-size: 25px;
-  color: ${color.black};
 `;
 
 const MenuSection = styled.View`
@@ -193,12 +193,10 @@ const MenuSection = styled.View`
 const MenuName = styled.Text`
   font-size: 28px;
   font-weight: 900;
-  color: ${color.black};
   margin-bottom: 15px;
 `;
 
 const MenuBox = styled.View`
-  background-color: ${color.gray50};
   border-radius: 7%;
   padding: 10px;
 `;
@@ -215,13 +213,11 @@ const MenuTextMain = styled.Text`
   font-size: 18px;
   font-weight: 500;
   margin-right: 10px;
-  color: ${color.black};
 `;
 
 const MenuTextSub = styled.Text`
   flex-shrink: 1;
   font-size: 18px;
-  color: ${props => props.c};
 `;
 
 const MenuTextTouchable = styled.TouchableOpacity`

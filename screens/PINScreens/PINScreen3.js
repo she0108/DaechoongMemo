@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Alert } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Container, BackButton, BackIcon, PromptText, ErrorText, PinInput} from './PINScreenStyles';
 
 
 const PINScreen3 = ({ navigation, route }) => {
+  const { colors } = useTheme();
   const [text, setText] = useState();
   const [error, setError] = useState(route.params.error);
   const PIN = route.params.pin;
@@ -35,19 +37,20 @@ const PINScreen3 = ({ navigation, route }) => {
 
 
   return (
-    <Container>
+    <Container style={{backgroundColor: colors.white}}>
       <BackButton onPress={() => navigation.pop()}>
-        <BackIcon name="arrowleft"/>
+        <BackIcon name="arrowleft" style={{color: colors.black}}/>
       </BackButton>
-      <PromptText>새로운 비밀번호를 한번 더 입력하세요</PromptText>
-      <ErrorText error={error}>틀렸습니다</ErrorText>
+      <PromptText style={{color: colors.black}}>새로운 비밀번호를 한번 더 입력하세요</PromptText>
+      <ErrorText style={{color: error ? colors.red : colors.white}}>틀렸습니다</ErrorText>
       <PinInput 
         maxLength={4} 
         keyboardType="number-pad"
         secureTextEntry={true}
         autoFocus={true}
         value={text}
-        onChangeText={onChangeText}/>
+        onChangeText={onChangeText}
+        style={{color: colors.black}}/>
     </Container>
   );
 };

@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { StatusBar, TouchableWithoutFeedback, ScrollView, Keyboard, Alert } from 'react-native';
 import styled from 'styled-components/native';
+import { useTheme } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign, MaterialCommunityIcons, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
-import { color } from '../color';
 
+/* light/dark 변경 시 Title, Content 텍스트 색상 안 바뀜 */
 
 const MemoScreen = ({ navigation, route }) => {
+  const { colors } = useTheme();
   const key = route.params.memoKey;
   const memoList = route.params.memoList;
   const [title, setTitle] = useState('');
@@ -68,42 +70,46 @@ const MemoScreen = ({ navigation, route }) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <Container>
-        <OptionContainer>
+      <Container style={{backgroundColor: colors.white}}>
+        <OptionContainer style={{backgroundColor: colors.gray50}}>
           <OptionButton onPress={() => setPinned(!pinned)}>
-            <PinIcon name={pinned ? "pin" : "pin-outline"}/>
+            <PinIcon name={pinned ? "pin" : "pin-outline"} style={{color: colors.gray500}}/>
           </OptionButton>
-          <Line/>
+          <Line style={{backgroundColor: colors.gray200}}/>
           <OptionButton onPress={() => setLocked(!locked)}>
-            <LockIcon name={locked ? "lock" : "unlock-alt"}/>
+            <LockIcon name={locked ? "lock" : "unlock-alt"} style={{color: colors.gray500}}/>
           </OptionButton>
-          <Line/>
+          <Line style={{backgroundColor: colors.gray200}}/>
           <OptionButton onPress={() => deleteMemo()}>
-            <DeleteIcon name="trash"/>
+            <DeleteIcon name="trash" style={{color: colors.gray500}}/>
           </OptionButton>
         </OptionContainer>
         <StatusBar/>
         <HeaderBar>
           <BackButton onPress={() => navigation.pop()}>
-            <BackIcon name="arrowleft"/>
+            <BackIcon name="arrowleft" style={{color: colors.black}}/>
           </BackButton>
         </HeaderBar>
         <ScrollView>
-          <DateText>{date.toLocaleDateString()}</DateText>
+          <DateText style={{color: colors.gray500}}>{date.toLocaleDateString()}</DateText>
           <TitleText
             multiline={true}
             scrollEnabled={false}
             returnKeyType="done"
             blurOnSubmit={true}
             placeholder="제목"
+            placeholderTextColor={colors.gray200}
             value={title}
-            onChangeText={onChangeTitle}/>
+            onChangeText={onChangeTitle}
+            style={{color: colors.black}}/>
           <ContentText
             multiline={true}
             scrollEnabled={false}
             placeholder="내용"
+            placeholderTextColor={colors.gray200}
             value={content}
-            onChangeText={onChangeContent}/>
+            onChangeText={onChangeContent}
+            style={{color: colors.black}}/>
         </ScrollView>  
       </Container>
     </TouchableWithoutFeedback>
@@ -117,7 +123,6 @@ const Container = styled.View`
   padding-top: 47px;
   padding-bottom: 34px; 
   padding-horizontal: 15px;
-  background-color: ${color.white};
   position: relative;
 `;
 
@@ -134,13 +139,11 @@ const BackButton = styled.TouchableOpacity``;
 
 const BackIcon = styled(AntDesign)`
   font-size: 25px;
-  color: ${color.black};
 `;
 
 const OptionContainer = styled.View`
   padding: 2px;
   border-radius: 10px;
-  background-color: ${color.lightgrey};
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
@@ -159,44 +162,36 @@ const OptionButton = styled.TouchableOpacity`
 
 const PinIcon = styled(MaterialCommunityIcons)`
   font-size: 23px;
-  color: ${color.gray500};
 `;
 
 const LockIcon = styled(FontAwesome)`
   font-size: 20px;
-  color: ${color.gray500};
   margin-top: 1px;
 `;
 
 const DeleteIcon = styled(FontAwesome5)`
   font-size: 17px;
-  color: ${color.gray500};
 `;
 
 const Line = styled.View`
   width: 1px;
   height: 90%;
-  background-color: ${color.gray200};
 `;
 
 const DateText = styled.Text`
   font-size: 15px;
-  color: ${color.darkgrey};
   margin-top: 0px;
   text-align: left;
-
 `;
 
 const TitleText = styled.TextInput`
   font-size: 28px;
   font-weight: 600;
-  color: ${color.black};
   margin-top: 5px;
 `;
 
 const ContentText = styled.TextInput`
   font-size: 20px;
-  color: ${color.black};
   margin-top: 8px;
 `;
 
