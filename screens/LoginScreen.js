@@ -39,6 +39,14 @@ const LoginScreen = ({navigation}) => {
               onPress: () => navigation.pop() 
             },
           ]);
+        } else {
+          // 백업 데이터 존재하지 않는 경우
+          Alert.alert("로그인 완료", null, [
+            { 
+              text: '확인',
+              onPress: () => navigation.pop()  
+            },
+          ]);
         }})})
     .catch((error) => {
       const errorCode = error.code;
